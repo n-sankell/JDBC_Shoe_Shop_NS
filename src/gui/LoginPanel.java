@@ -67,7 +67,6 @@ public class LoginPanel extends JPanel implements ActionListener {
     }
 
     private void validateUser() {
-        System.out.println("validate user!");
         loginListener.loginEvent(enteredName, enteredPass);
     }
 
@@ -81,12 +80,10 @@ public class LoginPanel extends JPanel implements ActionListener {
             System.out.println("login");
             enteredName = username.getText();
             enteredPass = password.getText();
-            System.out.println(enteredName);
-            System.out.println(enteredPass);
             validateUser();
         }
         if (e.getSource() == register) {
-            System.out.println("register");
+            System.out.println("Not featured yet");
         }
     }
 
