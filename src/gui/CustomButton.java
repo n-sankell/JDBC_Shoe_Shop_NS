@@ -1,0 +1,61 @@
+package gui;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class CustomButton extends JButton {
+
+    private final String text;
+
+
+    @Override
+    public String getText() {
+        return text;
+    }
+
+    public CustomButton(String text) {
+        this.text = text;
+        setForeground(Colors.TEXT);
+        setFont(getFont().deriveFont(Font.BOLD,30f));
+        setPreferredSize(new Dimension(200, 100));
+        setMaximumSize(new Dimension(200, 100));
+        setFocusPainted(false);
+        setBackground(Colors.BG_BRIGHT);
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        super.paintComponent(g2d);
+        if (getModel().isPressed()) {
+            g2d.setColor(Colors.BUTTON_PRESSED);
+        } else if (getModel().isRollover()) {
+            g2d.setColor(Colors.BUTTON_ROLL_OVER);
+        } else {
+            g2d.setColor(getBackground());
+        }
+        g2d.fillRect(0, 0, getWidth(), getHeight());
+        g2d.setColor(Colors.TEXT);
+        drawCenteredString(g2d, getWidth(), getHeight());
+    }
+
+    private void drawCenteredString(Graphics2D g2, int width, int height) {
+        FontMetrics fm = g2.getFontMetrics();
+        int x = (width - fm.stringWidth(text)) / 2;
+        int y = ((int) (fm.getAscent() + (height - (fm.getAscent() + fm.getDescent())) * 0.4));
+        g2.drawString(text, x, y);
+    }
+
+    @Override
+    public void paintBorder(Graphics g) {
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        g2.setColor(Colors.BUTTON_BORDER);
+        g2.setStroke(new BasicStroke(4));
+
+        Dimension size = getSize();
+        g2.drawRect(0,0, size.width, size.height);
+    }
+
+}

@@ -4,12 +4,16 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.Scanner;
 
-public class Repository {
+public class RepositoryAddToCart {
 
-    public void viewAverageScores(String name, String password, String connectionString) {
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/shoe_shop_db_new",name,password)) {
+    public void addToCart(Properties properties) {
+        String name = properties.getProperty("name");
+        String password = properties.getProperty("password");
+        String connectionString = properties.getProperty("connectionString");
+        try (Connection connection = DriverManager.getConnection(properties.getProperty("connectionString"), name, password)) {
 
             CallableStatement callableStatement = connection.prepareCall("CALL shoe_shop_db_new.addToCart(?,?,?)");
             callableStatement.setInt(1,parseInputToInt());
