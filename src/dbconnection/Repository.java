@@ -1,13 +1,15 @@
 package dbconnection;
 
-import java.sql.*;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Repository {
 
     public void viewAverageScores(String name, String password, String connectionString) {
-        try (Connection connection = DriverManager.getConnection(connectionString,
-                name, password)) {
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/shoe_shop_db_new",name,password)) {
 
             CallableStatement callableStatement = connection.prepareCall("CALL shoe_shop_db_new.addToCart(?,?,?)");
             callableStatement.setInt(1,parseInputToInt());
@@ -16,7 +18,7 @@ public class Repository {
             callableStatement.execute();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
 
     }
