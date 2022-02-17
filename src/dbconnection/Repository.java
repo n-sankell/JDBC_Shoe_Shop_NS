@@ -18,7 +18,7 @@ public class Repository {
             callableStatement.execute();
 
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
 
     }
