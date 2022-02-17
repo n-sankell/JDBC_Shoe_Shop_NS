@@ -1,17 +1,15 @@
 package dbobjectmodel;
 
-import java.time.LocalDateTime;
-
-public class OutOfStock {
+public class MapCompleteShoeColor {
 
     private final int id;
     private final int shoeId;
-    private final LocalDateTime date;
+    private final int colorId;
 
-    public OutOfStock(int id, int shoeId, LocalDateTime date) {
+    public MapCompleteShoeColor(int id, int shoeId, int colorId) {
         this.id = id;
         this.shoeId = shoeId;
-        this.date = date;
+        this.colorId = colorId;
     }
 
     public int getId() {
@@ -22,8 +20,7 @@ public class OutOfStock {
         return shoeId;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public int getColorId() {
+        return colorId;
     }
-
 }

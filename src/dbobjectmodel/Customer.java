@@ -1,10 +1,10 @@
 package dbobjectmodel;
 
 public class Customer {
-    int id;
-    int areaId;
-    String name;
-    String password;
+    private final int id;
+    private final int areaId;
+    private final String name;
+    private final String password;
 
     public Customer(int id, int areaId, String name, String password) {
         this.id = id;

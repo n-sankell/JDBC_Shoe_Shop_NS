@@ -31,7 +31,6 @@ public class RepositoryFindCustomer {
                 String customerPassword = resultSet.getString("customer.password");
                 Customer customer = new Customer(id, areaId, customerName, customerPassword);
                 allCustomers.add(customer);
-                //System.out.printf("ID: %s Name: %s AreaId: %s Password: %s\n",id,customerName,areaId,customerPassword);
             }
 
         } catch (SQLException e) {

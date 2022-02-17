@@ -6,7 +6,6 @@ import gui.BaseFrame;
 import gui.CustomJop;
 import listeners.LoginListener;
 
-import javax.swing.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -14,13 +13,13 @@ import java.util.Properties;
 public class Controller {
 
     private User user;
-    BaseFrame base;
+    private BaseFrame base;
     private PropertyReader propertyReader;
     private LoginListener loginListener;
     private RepositoryFindCustomer findCustomers;
 
     public Controller() {
-        setLoginHandler();
+        setEventHandler();
     }
 
     public void startGui() {
@@ -44,7 +43,7 @@ public class Controller {
         findCustomers.fetchCustomersToList();
     }
 
-    private void setLoginHandler() {
+    private void setEventHandler() {
         loginListener = (username, password) -> {
             getCustomersFromServer();
             findCustomers.getCustomers().stream()
@@ -53,12 +52,12 @@ public class Controller {
             String message = user == null ? "Username and password do not match! " : "Welcome "+user.name()+"!";
             String buttonText = user == null ? "Try again" : "Let's shop!";
             new CustomJop(message, buttonText);
-            //JOptionPane.showMessageDialog(null,message);
             if (user != null) {
                 base.removeLogin();
                 base.addShopPanel();
             }
         };
+
     }
 
     private static class PropertyReader {
