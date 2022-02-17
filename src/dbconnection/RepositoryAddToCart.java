@@ -9,16 +9,21 @@ import java.util.Scanner;
 
 public class RepositoryAddToCart {
 
-    public void addToCart(Properties properties) {
+    private final Properties properties;
+
+    public RepositoryAddToCart(Properties properties) {
+        this.properties = properties;
+    }
+
+    public void addToCart(int customerId, int orderId, int shoeId) {
         String name = properties.getProperty("name");
         String password = properties.getProperty("password");
-        String connectionString = properties.getProperty("connectionString");
-        try (Connection connection = DriverManager.getConnection(properties.getProperty("connectionString"), name, password)) {
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/shoe_shop_db_new", name, password)) {
 
             CallableStatement callableStatement = connection.prepareCall("CALL shoe_shop_db_new.addToCart(?,?,?)");
-            callableStatement.setInt(1,parseInputToInt());
-            callableStatement.setInt(2,parseInputToInt());
-            callableStatement.setInt(3,parseInputToInt());
+            callableStatement.setInt(1,customerId);
+            callableStatement.setInt(2,orderId);
+            callableStatement.setInt(3,shoeId);
             callableStatement.execute();
 
         } catch (SQLException e) {

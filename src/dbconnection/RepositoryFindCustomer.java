@@ -6,7 +6,12 @@ import java.util.Scanner;
 
 public class RepositoryFindCustomer {
 
-    public void getAllCustomers(Properties properties) {
+    private Properties properties;
+    public RepositoryFindCustomer(Properties properties) {
+        this.properties = properties;
+    }
+
+    public void getAllCustomers() {
         String name = properties.getProperty("name");
         String password = properties.getProperty("password");
         String connectionString = properties.getProperty("connectionString");

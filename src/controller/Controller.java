@@ -24,14 +24,14 @@ public class Controller {
         getAllCustomers();
     }
 
-    private void addToCart() {
-        RepositoryAddToCart repositoryAddToCart = new RepositoryAddToCart();
-        repositoryAddToCart.addToCart(propertyReader.properties);
+    private void addToCart(int customerId, int orderId, int shoeId) {
+        RepositoryAddToCart repositoryAddToCart = new RepositoryAddToCart(propertyReader.properties);
+        repositoryAddToCart.addToCart(customerId, orderId, shoeId);
     }
 
     private void getAllCustomers() {
-        RepositoryFindCustomer findCustomers = new RepositoryFindCustomer();
-        findCustomers.getAllCustomers(propertyReader.properties);
+        RepositoryFindCustomer findCustomers = new RepositoryFindCustomer(propertyReader.properties);
+        findCustomers.getAllCustomers();
     }
 
     private static class PropertyReader {
