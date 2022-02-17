@@ -1,17 +1,22 @@
 package dbconnection;
 
+import dbobjectmodel.Customer;
+
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
-import java.util.Scanner;
 
 public class RepositoryFindCustomer {
 
-    private Properties properties;
+    private final Properties properties;
+    private final List<Customer> allCustomers = new ArrayList<>();
+
     public RepositoryFindCustomer(Properties properties) {
         this.properties = properties;
     }
 
-    public void getAllCustomers() {
+    public void fetchCustomersToList() {
         String name = properties.getProperty("name");
         String password = properties.getProperty("password");
         String connectionString = properties.getProperty("connectionString");
@@ -24,7 +29,9 @@ public class RepositoryFindCustomer {
                 int areaId = resultSet.getInt("customer.areaId");
                 String customerName = resultSet.getString("customer.fullName");
                 String customerPassword = resultSet.getString("customer.password");
-                System.out.printf("ID: %s Name: %s AreaId: %s Password: %s\n",id,customerName,areaId,customerPassword);
+                Customer customer = new Customer(id, areaId, customerName, customerPassword);
+                allCustomers.add(customer);
+                //System.out.printf("ID: %s Name: %s AreaId: %s Password: %s\n",id,customerName,areaId,customerPassword);
             }
 
         } catch (SQLException e) {
@@ -33,17 +40,9 @@ public class RepositoryFindCustomer {
 
     }
 
-
-
-    private int parseInputToInt() {
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            try {
-                return Integer.parseInt(scanner.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Could not parse integer.");
-            }
-        }
+    public List<Customer> getCustomers() {
+        return allCustomers;
     }
+
 
 }

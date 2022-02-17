@@ -7,17 +7,33 @@ import java.awt.*;
 
 public class BaseFrame extends JFrame {
 
-    private User user;
     private LoginPanel loginPanel;
+    private ShopPanel shopPanel;
     private final GridBagLayout gb = new GridBagLayout();
 
     public BaseFrame() {
         super("Shoe Shop!");
         setUpLogin();
+        setUpShopPanel();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(new Dimension(1200,900));
         setLocation(300,100);
         setVisible(true);
+    }
+
+    private void setUpShopPanel() {
+        shopPanel = new ShopPanel();
+        shopPanel.addShop();
+    }
+
+    public void removeLogin() {
+        remove(loginPanel);
+    }
+
+    public void addShopPanel() {
+        add(shopPanel);
+        repaint();
+        revalidate();
     }
 
     private void setUpLogin() {
@@ -25,9 +41,13 @@ public class BaseFrame extends JFrame {
         loginPanel.setVisible(true);
     }
 
-    public void startLogin(User user) {
-        loginPanel.login(user);
+    public void startLogin() {
+        loginPanel.login();
         add(loginPanel);
+    }
+
+    public LoginPanel getLoginPanel() {
+        return loginPanel;
     }
 
 }

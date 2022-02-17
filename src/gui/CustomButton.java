@@ -17,10 +17,10 @@ public class CustomButton extends JButton {
         this.text = text;
         setForeground(Colors.TEXT);
         setFont(getFont().deriveFont(Font.BOLD,30f));
-        setPreferredSize(new Dimension(200, 100));
-        setMaximumSize(new Dimension(200, 100));
+        setPreferredSize(new Dimension(200, 75));
+        setMaximumSize(new Dimension(200, 75));
         setFocusPainted(false);
-        setBackground(Colors.BG_BRIGHT);
+        setBackground(Colors.TEXT);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class CustomButton extends JButton {
             g2d.setColor(getBackground());
         }
         g2d.fillRect(0, 0, getWidth(), getHeight());
-        g2d.setColor(Colors.TEXT);
+        g2d.setColor(Colors.BG_BRIGHT);
         drawCenteredString(g2d, getWidth(), getHeight());
     }
 
@@ -51,8 +51,8 @@ public class CustomButton extends JButton {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        g2.setColor(Colors.BUTTON_BORDER);
-        g2.setStroke(new BasicStroke(4));
+        g2.setColor(Colors.BUTTON_ROLL_OVER);
+        g2.setStroke(new BasicStroke(8));
 
         Dimension size = getSize();
         g2.drawRect(0,0, size.width, size.height);
