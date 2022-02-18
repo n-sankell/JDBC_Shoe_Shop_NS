@@ -4,8 +4,7 @@ import listeners.LoginListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 public class LoginPanel extends JPanel implements ActionListener {
 
@@ -24,17 +23,40 @@ public class LoginPanel extends JPanel implements ActionListener {
         setLayout(gb);
     }
 
+    private void changeFont(JTextField textField) {
+        textField.setText("");
+        textField.setForeground(Colors.TEXT);
+        textField.setFont(new Font("Arial", Font.PLAIN,12));
+        revalidate();
+    }
+
     private void setInputFields() {
-        username = new JTextField("username");
-        password = new JTextField("password");
-        username.setBounds(10,10,300,30);
-        password.setBounds(10,10,300,30);
-        username.setForeground(Colors.TEXT);
-        password.setForeground(Colors.TEXT);
+        username = new JTextField("Nils Karlsson");
+        password = new JTextField("nisse");
+        username.setForeground(Color.GRAY);
+        password.setForeground(Color.GRAY);
+        username.setFont(new Font("Arial", Font.ITALIC,12));
+        password.setFont(new Font("Arial", Font.ITALIC,12));
+        username.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                changeFont(username);
+            }
+        });
+        password.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                changeFont(password);
+            }
+        });
+        username.setBounds(10,10,200,30);
+        password.setBounds(10,10,200,30);
         username.setBackground(Colors.BG_BRIGHT);
         password.setBackground(Colors.BG_BRIGHT);
-        username.setSize(new Dimension(200,50));
-        password.setSize(new Dimension(200,50));
+        username.setPreferredSize(new Dimension(200,20));
+        password.setPreferredSize(new Dimension(200,20));
         login = new CustomButton("login");
         register = new CustomButton("register");
         login.addActionListener(this);
@@ -45,7 +67,7 @@ public class LoginPanel extends JPanel implements ActionListener {
         GridBagConstraints gc = new GridBagConstraints();
         gc.insets = new Insets(20,10 ,20 ,10 );
         gc.gridwidth = GridBagConstraints.REMAINDER;
-        gc.ipadx = 250;
+        gc.ipadx = 30;
         gc.ipady = 15;
         gc.gridx = 2;
         gc.gridy = 1;
@@ -85,6 +107,7 @@ public class LoginPanel extends JPanel implements ActionListener {
         if (e.getSource() == register) {
             System.out.println("Not featured yet");
         }
+
     }
 
 }

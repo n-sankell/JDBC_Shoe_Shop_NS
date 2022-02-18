@@ -18,6 +18,7 @@ public class BaseFrame extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(new Dimension(1200,900));
         setLocation(300,100);
+        setResizable(false);
         setVisible(true);
     }
 
@@ -28,6 +29,10 @@ public class BaseFrame extends JFrame {
 
     public void removeLogin() {
         remove(loginPanel);
+    }
+
+    public void removeShopPanel() {
+        remove(shopPanel);
     }
 
     public void addShopPanel() {
@@ -44,10 +49,16 @@ public class BaseFrame extends JFrame {
     public void startLogin() {
         loginPanel.login();
         add(loginPanel);
+        repaint();
+        revalidate();
     }
 
     public LoginPanel getLoginPanel() {
         return loginPanel;
+    }
+
+    public ShopPanel getShopPanel() {
+        return shopPanel;
     }
 
 }

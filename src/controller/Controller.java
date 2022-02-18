@@ -4,6 +4,7 @@ import dbconnection.RepositoryAddToCart;
 import dbconnection.RepositoryFindCustomer;
 import gui.BaseFrame;
 import gui.CustomJop;
+import listeners.LogOutListener;
 import listeners.LoginListener;
 
 import java.io.FileInputStream;
@@ -16,6 +17,7 @@ public class Controller {
     private BaseFrame base;
     private PropertyReader propertyReader;
     private LoginListener loginListener;
+    private LogOutListener logOutListener;
     private RepositoryFindCustomer findCustomers;
 
     public Controller() {
@@ -26,6 +28,7 @@ public class Controller {
         base = new BaseFrame();
         base.startLogin();
         base.getLoginPanel().setLoginListener(loginListener);
+        base.getShopPanel().setLogOutListener(logOutListener);
     }
 
     public void startConnection() {
@@ -38,14 +41,14 @@ public class Controller {
         repositoryAddToCart.addToCart(customerId, orderId, shoeId);
     }
 
-    private void getCustomersFromServer() {
+    private void loadCustomersFromServer() {
         findCustomers = new RepositoryFindCustomer(propertyReader.properties);
         findCustomers.fetchCustomersToList();
     }
 
     private void setEventHandler() {
         loginListener = (username, password) -> {
-            getCustomersFromServer();
+            loadCustomersFromServer();
             findCustomers.getCustomers().stream()
                     .filter(customer -> customer.getName().equals(username) && customer.getPassword().equals(password))
                     .toList().forEach(customer -> user = new User(customer.getId(), customer.getName()));
@@ -57,7 +60,11 @@ public class Controller {
                 base.addShopPanel();
             }
         };
-
+        logOutListener = () -> {
+            user = null;
+            base.removeShopPanel();
+            base.startLogin();
+        };
     }
 
     private static class PropertyReader {
