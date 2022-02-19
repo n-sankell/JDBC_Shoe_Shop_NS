@@ -52,7 +52,7 @@ public class Controller {
             findCustomers.getCustomers().stream()
                     .filter(customer -> customer.getName().equals(username) && customer.getPassword().equals(password))
                     .toList().forEach(customer -> user = new User(customer.getId(), customer.getName()));
-            String message = user == null ? "Username and password do not match! " : "Welcome "+user.name()+"!";
+            String message = user == null ? "Username and password do not match! " : "Welcome "+user.getName()+"!";
             String buttonText = user == null ? "Try again" : "Let's shop!";
             new CustomJop(message, buttonText);
             if (user != null) {

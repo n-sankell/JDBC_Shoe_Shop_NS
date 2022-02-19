@@ -5,6 +5,8 @@ public class MapCompleteShoeColor {
     private final int id;
     private final int shoeId;
     private final int colorId;
+    private CompleteShoe shoe;
+    private ShoeColor color;
 
     public MapCompleteShoeColor(int id, int shoeId, int colorId) {
         this.id = id;
@@ -22,5 +24,21 @@ public class MapCompleteShoeColor {
 
     public int getColorId() {
         return colorId;
+    }
+
+    public CompleteShoe getShoe() {
+        return shoe;
+    }
+
+    public void setShoe(CompleteShoe shoe) {
+        this.shoe = shoe;
+    }
+
+    public ShoeColor getColor() {
+        return color;
+    }
+
+    public void setColor(ShoeColor color) {
+        this.color = color;
     }
 }

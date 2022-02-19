@@ -9,6 +9,9 @@ public class Rating {
     private final int customerId;
     private final int productId;
     private final LocalDateTime date;
+    private RatingGrade grade;
+    private Customer customer;
+    private BaseProduct product;
 
     public Rating(int id, int getId, int customerId, int productId, LocalDateTime date) {
         this.id = id;
@@ -36,5 +39,29 @@ public class Rating {
 
     public LocalDateTime getDate() {
         return date;
+    }
+
+    public RatingGrade getGrade() {
+        return grade;
+    }
+
+    public void setGrade(RatingGrade grade) {
+        this.grade = grade;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public BaseProduct getProduct() {
+        return product;
+    }
+
+    public void setProduct(BaseProduct product) {
+        this.product = product;
     }
 }

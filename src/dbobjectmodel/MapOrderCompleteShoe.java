@@ -5,6 +5,8 @@ public class MapOrderCompleteShoe {
     private final int id;
     private final int orderId;
     private final int shoeId;
+    private Order order;
+    private CompleteShoe shoe;
 
     public MapOrderCompleteShoe(int id, int orderId, int shoeId) {
         this.id = id;
@@ -22,5 +24,21 @@ public class MapOrderCompleteShoe {
 
     public int getShoeId() {
         return shoeId;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public CompleteShoe getShoe() {
+        return shoe;
+    }
+
+    public void setShoe(CompleteShoe shoe) {
+        this.shoe = shoe;
     }
 }

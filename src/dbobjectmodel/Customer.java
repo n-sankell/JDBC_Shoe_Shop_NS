@@ -5,6 +5,7 @@ public class Customer {
     private final int areaId;
     private final String name;
     private final String password;
+    private Area area;
 
     public Customer(int id, int areaId, String name, String password) {
         this.id = id;
@@ -28,5 +29,12 @@ public class Customer {
     public String getPassword() {
         return password;
     }
-    
+
+    public void setArea(Area area) {
+        this.area = area;
+    }
+
+    public Area getArea() {
+        return area;
+    }
 }
