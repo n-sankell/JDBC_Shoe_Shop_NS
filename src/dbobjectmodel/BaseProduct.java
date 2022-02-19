@@ -10,6 +10,7 @@ public class BaseProduct {
     private final String name;
     private Label label;
     private final List<Category> categories = new ArrayList<>();
+    private final List<CompleteShoe> shoes = new ArrayList<>();
 
     public BaseProduct(int id, int labelId, String name) {
         this.id = id;
@@ -43,5 +44,13 @@ public class BaseProduct {
 
     public List<Category> getCategories() {
         return categories;
+    }
+
+    public void addShoe(CompleteShoe category) {
+        shoes.add(category);
+    }
+
+    public List<CompleteShoe> getShoes() {
+        return shoes;
     }
 }
