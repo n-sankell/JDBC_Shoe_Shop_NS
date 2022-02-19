@@ -26,54 +26,51 @@ public class RepositoryFIllObjects {
         connectionString = properties.getProperty("connectionString");
     }
 
-    public List<Category> getCategoriesByBaseProductId(int baseProductId) {
-        List<Category> products = new ArrayList<>();
-        String query = "select * from shoe_shop_db_new.category "+
-                "inner join shoe_shop_db_new.map_base_product_category on map_base_product_category.categoryId = category.id "+
-                "inner join shoe_shop_db_new.base_product on map_base_product_category.productId = base_product.id "+
-                "where base_product.id = ?";
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/shoe_shop_db_new", name, password)) {
-            PreparedStatement stmt = con.prepareStatement(query);
-            stmt.setString(1, baseProductId+"");
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                products.add(new Category(rs.getInt("id"),rs.getString("categoryName")));
-            }
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return products;
-    }
-
-    public Label getLabelByProductId(int productId) {
-        Label label = null;
-        String query = "select * from shoe_shop_db_new.label inner join shoe_shop_db_new.base_product "
-                + "on base_product.labelId = label.id "
-                + "where base_product.id = ?";
+    public Price getPriceByShoeId(int shoeId) {
+        Price price = null;
+        String query = "select * from shoe_shop_db_new.price inner join shoe_shop_db_new.shoe " +
+                "on price.id = shoe.priceId where shoe.id = ?";
 
         try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/shoe_shop_db_new", name, password);
              PreparedStatement stmt = con.prepareStatement(query)) {
 
-            stmt.setString(1, productId+"");
+            stmt.setString(1, shoeId+"");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                label = new Label(rs.getInt("id"),rs.getString("name"));
+                price = new Price(rs.getInt("id"),rs.getDouble("shoePrice"));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return label;
+        return price;
+    }
+
+    public Size getSizeByShoeId(int shoeId) {
+        Size size = null;
+        String query = "select * from shoe_shop_db_new.size inner join shoe_shop_db_new.shoe " +
+                "on size.id = shoe.sizeId where shoe.id = ?";
+
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/shoe_shop_db_new", name, password);
+             PreparedStatement stmt = con.prepareStatement(query)) {
+
+            stmt.setString(1, shoeId+"");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                size = new Size(rs.getInt("id"),rs.getDouble("shoeSize"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return size;
     }
 
     public List<ShoeColor> getColorsByShoeId(int shoeId) {
         List<ShoeColor> colors = new ArrayList<>();
         String query = "select * from shoe_shop_db_new.color "+
                 "inner join shoe_shop_db_new.map_shoe_color on map_shoe_color.colorId = color.id " +
-                "inner join shoe_shop_db_new.shoe on map_shoe_color.shoeId = shoe.id " +
-                "where shoe.id = ?";
+                "inner join shoe_shop_db_new.shoe on map_shoe_color.shoeId = shoe.id where shoe.id = ?";
         try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/shoe_shop_db_new", name, password)) {
             PreparedStatement stmt = con.prepareStatement(query);
             stmt.setString(1, shoeId+"");
@@ -104,18 +101,58 @@ public class RepositoryFIllObjects {
             while (rs.next()) {
                 shoe = new CompleteShoe(rs.getInt("id"),rs.getInt("baseProductId"),
                         rs.getInt("sizeId"), rs.getInt("priceId"),rs.getInt("inStock"));
+                shoe.setSize(getSizeByShoeId(shoe.getId()));
+                shoe.setPrice(getPriceByShoeId(shoe.getId()));
+                List<ShoeColor> colors = getColorsByShoeId(shoe.getId());
+                shoe.setProduct(product);
+                colors.forEach(shoe::addColor);
+                shoes.add(shoe);
             }
-            assert shoe != null;
-            Size size;
-            Price price;
-            List<ShoeColor> colors = getColorsByShoeId(shoe.getId());
-            shoe.setProduct(product);
-            shoes.add(shoe);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
         return shoes;
+    }
+
+    public List<Category> getCategoriesByBaseProductId(int baseProductId) {
+        List<Category> products = new ArrayList<>();
+        String query = "select * from shoe_shop_db_new.category "+
+                "inner join shoe_shop_db_new.map_base_product_category on map_base_product_category.categoryId = category.id " +
+                "inner join shoe_shop_db_new.base_product on map_base_product_category.productId = base_product.id where base_product.id = ?";
+
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/shoe_shop_db_new", name, password)) {
+            PreparedStatement stmt = con.prepareStatement(query);
+            stmt.setString(1, baseProductId+"");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                products.add(new Category(rs.getInt("id"),rs.getString("categoryName")));
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return products;
+    }
+
+    public Label getLabelByProductId(int productId) {
+        Label label = null;
+        String query = "select * from shoe_shop_db_new.label inner join shoe_shop_db_new.base_product " +
+                "on base_product.labelId = label.id where base_product.id = ?";
+
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/shoe_shop_db_new", name, password);
+             PreparedStatement stmt = con.prepareStatement(query)) {
+
+            stmt.setString(1, productId+"");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                label = new Label(rs.getInt("id"),rs.getString("name"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return label;
     }
 
     public BaseProduct getBaseProductById(int id) {
@@ -132,13 +169,11 @@ public class RepositoryFIllObjects {
 
             while (rs.next()) {
                 product = new BaseProduct(rs.getInt("id"),rs.getInt("labelId"),rs.getString("productName"));
+                List<CompleteShoe> shoes = getCompleteShoByProdId(id, product);
+                product.setLabel(label);
+                categories.forEach(product::addCategory);
+                shoes.forEach(product::addShoe);
             }
-            List<CompleteShoe> shoes = getCompleteShoByProdId(id,product);
-            assert product != null;
-            product.setLabel(label);
-            categories.forEach(product::addCategory);
-            shoes.forEach(product::addShoe);
-
 
         } catch (Exception e) {
             e.printStackTrace();
