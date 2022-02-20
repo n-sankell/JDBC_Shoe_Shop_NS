@@ -20,13 +20,13 @@ public class RepositoryFIllObjects {
         setConnectionStrings();
     }
 
-    public void setConnectionStrings() {
+    private void setConnectionStrings() {
         name = properties.getProperty("name");
         password = properties.getProperty("password");
         connectionString = properties.getProperty("connectionString");
     }
 
-    public Price getPriceByShoeId(int shoeId) {
+    private Price getPriceByShoeId(int shoeId) {
         Price price = null;
         String query = "select * from shoe_shop_db_new.price inner join shoe_shop_db_new.shoe " +
                 "on price.id = shoe.priceId where shoe.id = ?";
@@ -46,7 +46,7 @@ public class RepositoryFIllObjects {
         return price;
     }
 
-    public Size getSizeByShoeId(int shoeId) {
+    private Size getSizeByShoeId(int shoeId) {
         Size size = null;
         String query = "select * from shoe_shop_db_new.size inner join shoe_shop_db_new.shoe " +
                 "on size.id = shoe.sizeId where shoe.id = ?";
@@ -66,7 +66,7 @@ public class RepositoryFIllObjects {
         return size;
     }
 
-    public List<ShoeColor> getColorsByShoeId(int shoeId) {
+    private List<ShoeColor> getColorsByShoeId(int shoeId) {
         List<ShoeColor> colors = new ArrayList<>();
         String query = "select * from shoe_shop_db_new.color "+
                 "inner join shoe_shop_db_new.map_shoe_color on map_shoe_color.colorId = color.id " +
@@ -86,7 +86,7 @@ public class RepositoryFIllObjects {
         return colors;
     }
 
-    public List<CompleteShoe> getCompleteShoByProdId(int id, BaseProduct product) {
+    private List<CompleteShoe> getCompleteShoByProdId(int id, BaseProduct product) {
         CompleteShoe shoe = null;
         List<CompleteShoe> shoes = new ArrayList<>();
         String query = "select * from shoe_shop_db_new.shoe inner join shoe_shop_db_new.base_product on " +
@@ -114,7 +114,7 @@ public class RepositoryFIllObjects {
         return shoes;
     }
 
-    public List<Category> getCategoriesByBaseProductId(int baseProductId) {
+    private List<Category> getCategoriesByBaseProductId(int baseProductId) {
         List<Category> products = new ArrayList<>();
         String query = "select * from shoe_shop_db_new.category "+
                 "inner join shoe_shop_db_new.map_base_product_category on map_base_product_category.categoryId = category.id " +
@@ -135,7 +135,7 @@ public class RepositoryFIllObjects {
         return products;
     }
 
-    public Label getLabelByProductId(int productId) {
+    private Label getLabelByProductId(int productId) {
         Label label = null;
         String query = "select * from shoe_shop_db_new.label inner join shoe_shop_db_new.base_product " +
                 "on base_product.labelId = label.id where base_product.id = ?";
@@ -147,7 +147,7 @@ public class RepositoryFIllObjects {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                label = new Label(rs.getInt("id"),rs.getString("name"));
+                label = new Label(rs.getInt("id"),rs.getString("labelName"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -155,7 +155,7 @@ public class RepositoryFIllObjects {
         return label;
     }
 
-    public BaseProduct getBaseProductById(int id) {
+    private BaseProduct getBaseProductById(int id) {
         BaseProduct product = null;
         Label label = getLabelByProductId(id);
         List<Category> categories = getCategoriesByBaseProductId(id);

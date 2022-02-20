@@ -1,6 +1,7 @@
 package controller;
 
 import dbconnection.RepositoryAddToCart;
+import dbconnection.RepositoryFIllObjects;
 import dbconnection.RepositoryFindCustomer;
 import gui.BaseFrame;
 import gui.CustomJop;
@@ -36,6 +37,11 @@ public class Controller {
         propertyReader.readProperties();
     }
 
+    private void printShoes() {
+        RepositoryFIllObjects repo = new RepositoryFIllObjects(propertyReader.properties);
+        repo.getBaseProducts().forEach(e -> e.getShoes().forEach(i -> i.getColors().forEach(u -> System.out.println(i.getProduct().getName()+" "+ e.getLabel().getName()+" "+i.getPrice().getPrice()+" " +u.getName()))));
+    }
+
     private void addToCart(int customerId, int orderId, int shoeId) {
         RepositoryAddToCart repositoryAddToCart = new RepositoryAddToCart(propertyReader.properties);
         repositoryAddToCart.addToCart(customerId, orderId, shoeId);
@@ -64,6 +70,7 @@ public class Controller {
             user = null;
             base.removeShopPanel();
             base.startLogin();
+            printShoes();
         };
     }
 

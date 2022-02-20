@@ -7,7 +7,6 @@ public class DisplayLabel extends JButton {
 
     private final String text;
 
-
     @Override
     public String getText() {
         return text;

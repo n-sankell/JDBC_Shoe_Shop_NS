@@ -36,9 +36,10 @@ public class ShopPanel extends JPanel implements ActionListener {
     }
 
     private void addProducts() {
+        int i = 1;
         for (DisplayLabel entry: allProducts.values()) {
-            System.out.println(entry.getText());
             scrollablePanel.add(entry);
+            i++;
         }
     }
 
@@ -53,9 +54,14 @@ public class ShopPanel extends JPanel implements ActionListener {
 
     private void setUp() {
         scrollablePanel = new JPanel();
-        scrollablePanel.setLayout(new FlowLayout(FlowLayout.LEFT,50,50));
+        scrollablePanel.setVisible(true);
+        GridLayout grid = new GridLayout(allProducts.size()/3,3);
+        grid.setHgap(40);
+        grid.setVgap(40);
+        scrollablePanel.setLayout(grid);
         scrollablePanel.setBackground(Colors.BG_BRIGHT);
-        scrollPane = new JScrollPane(scrollablePanel);
+        scrollPane = new JScrollPane(scrollablePanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVisible(true);
     }
 
     public void addShop() {
@@ -69,11 +75,13 @@ public class ShopPanel extends JPanel implements ActionListener {
         gc.insets = new Insets(0,10 ,0 ,10 );
         add(menuBar,gc);
         gc.insets = new Insets(110,20 ,60 ,20 );
-        gc.ipadx = 800;
-        gc.ipady = 600;
+        gc.ipadx = 100;
+        gc.ipady = 1200;
         gc.gridx = 2;
         gc.gridy = 2;
+        addProducts();
         add(scrollablePanel,gc);
+
     }
 
     public void setLogOutListener(LogOutListener logOutListener) {
