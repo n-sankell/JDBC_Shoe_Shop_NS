@@ -15,7 +15,7 @@ public class DisplayLabel extends JButton {
     public DisplayLabel(String text) {
         this.text = text;
         setForeground(Colors.TEXT);
-        setFont(getFont().deriveFont(Font.BOLD,30f));
+        setFont(getFont().deriveFont(Font.BOLD,16f));
         setPreferredSize(new Dimension(150, 50));
         setMaximumSize(new Dimension(150, 50));
         setFocusPainted(false);

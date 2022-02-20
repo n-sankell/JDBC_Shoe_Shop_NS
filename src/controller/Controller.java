@@ -3,6 +3,7 @@ package controller;
 import dbconnection.RepositoryAddToCart;
 import dbconnection.RepositoryFIllObjects;
 import dbconnection.RepositoryFindCustomer;
+import dbobjectmodel.BaseProduct;
 import gui.BaseFrame;
 import gui.CustomJop;
 import listeners.LogOutListener;
@@ -10,6 +11,7 @@ import listeners.LoginListener;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 
 public class Controller {
@@ -19,6 +21,7 @@ public class Controller {
     private PropertyReader propertyReader;
     private LoginListener loginListener;
     private LogOutListener logOutListener;
+    private List<BaseProduct> productList;
     private RepositoryFindCustomer findCustomers;
 
     public Controller() {
@@ -35,11 +38,12 @@ public class Controller {
     public void startConnection() {
         propertyReader = new PropertyReader();
         propertyReader.readProperties();
+        populateShoeList();
     }
 
-    private void printShoes() {
+    private void populateShoeList() {
         RepositoryFIllObjects repo = new RepositoryFIllObjects(propertyReader.properties);
-        repo.getBaseProducts().forEach(e -> e.getShoes().forEach(i -> i.getColors().forEach(u -> System.out.println(i.getProduct().getName()+" "+ e.getLabel().getName()+" "+i.getPrice().getPrice()+" " +u.getName()))));
+        productList = repo.getBaseProducts();
     }
 
     private void addToCart(int customerId, int orderId, int shoeId) {
@@ -64,13 +68,13 @@ public class Controller {
             if (user != null) {
                 base.removeLogin();
                 base.addShopPanel();
+                base.getShopPanel().getScrollablePanel().fillMap(productList);
             }
         };
         logOutListener = () -> {
             user = null;
             base.removeShopPanel();
             base.startLogin();
-            printShoes();
         };
     }
 

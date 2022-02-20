@@ -1,46 +1,26 @@
 package gui;
 
-import dbobjectmodel.BaseProduct;
 import listeners.LogOutListener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ShopPanel extends JPanel implements ActionListener {
 
-    private JPanel scrollablePanel;
     private JScrollPane scrollPane;
     private final JMenuBar menuBar = new JMenuBar();
     private final JMenu menu = new JMenu();
     private final JMenuItem logout = new JMenuItem();
     private LogOutListener logOutListener;
-    private final GridBagLayout gb = new GridBagLayout();
-    private final Map<BaseProduct,DisplayLabel> allProducts = new HashMap<>();
+    private final ScrollablePanel scrollablePanel = new ScrollablePanel();
 
     public ShopPanel() {
         setBackground(Colors.BG_DARK);
-        fillMap();
-        setLayout(gb);
+        setLayout(new GridLayout());
         setUpMenu();
         setUp();
-    }
-
-    private void fillMap() {
-        for (int i = 0; i <= 40; i++) {
-            allProducts.put(new BaseProduct(i,i,"shoe "+i),new DisplayLabel("shoe "+i));
-        }
-    }
-
-    private void addProducts() {
-        int i = 1;
-        for (DisplayLabel entry: allProducts.values()) {
-            scrollablePanel.add(entry);
-            i++;
-        }
     }
 
     private void setUpMenu() {
@@ -53,13 +33,6 @@ public class ShopPanel extends JPanel implements ActionListener {
     }
 
     private void setUp() {
-        scrollablePanel = new JPanel();
-        scrollablePanel.setVisible(true);
-        GridLayout grid = new GridLayout(allProducts.size()/3,3);
-        grid.setHgap(40);
-        grid.setVgap(40);
-        scrollablePanel.setLayout(grid);
-        scrollablePanel.setBackground(Colors.BG_BRIGHT);
         scrollPane = new JScrollPane(scrollablePanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVisible(true);
     }
@@ -74,14 +47,17 @@ public class ShopPanel extends JPanel implements ActionListener {
         gc.gridheight = GridBagConstraints.NORTH;
         gc.insets = new Insets(0,10 ,0 ,10 );
         add(menuBar,gc);
+        gc.gridwidth = GridBagConstraints.REMAINDER;
         gc.insets = new Insets(110,20 ,60 ,20 );
-        gc.ipadx = 100;
-        gc.ipady = 1200;
+        gc.ipadx = 800;
+        gc.ipady = 700;
         gc.gridx = 2;
         gc.gridy = 2;
-        addProducts();
-        add(scrollablePanel,gc);
+        add(scrollPane,gc);
+    }
 
+    public ScrollablePanel getScrollablePanel() {
+        return scrollablePanel;
     }
 
     public void setLogOutListener(LogOutListener logOutListener) {
