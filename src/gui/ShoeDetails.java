@@ -136,6 +136,12 @@ public class ShoeDetails extends JPanel implements ActionListener {
         revalidate();
     }
 
+    public void updateInStock() {
+        inStock.setText(selectedShoe.getAmountInStock()+"");
+        repaint();
+        revalidate();
+    }
+
     private void setCategories(BaseProduct product) {
         categoryString = new StringBuilder();
         for (Category category: product.getCategories()) {

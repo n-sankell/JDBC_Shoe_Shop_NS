@@ -96,13 +96,19 @@ public class Controller {
             base.getShopPanel().addScrollPane();
         };
         addToCartListener = (shoe) -> {
+            String message = "";
             RepositoryAddToCart repositoryAddToCart = new RepositoryAddToCart(propertyReader.properties);
             if (user.getShoes().isEmpty()) {
-                repositoryAddToCart.addToNewCart(user.getId(),0,shoe.getId());
+                message = repositoryAddToCart.addToNewCart(user.getId(),0,shoe.getId());
             } else {
-                repositoryAddToCart.addToExistingCart(user.getId(),shoe.getId());
+                message = repositoryAddToCart.addToExistingCart(user.getId(),shoe.getId());
             }
-            user.addShoe(shoe);
+            if (!message.equals("")) {
+                user.addShoe(shoe);
+                new CustomJop(message,"ok");
+                shoe.setAmountInStock(shoe.getAmountInStock()-1);
+                base.getShopPanel().getShoeDetails().updateInStock();
+            }
         };
     }
 

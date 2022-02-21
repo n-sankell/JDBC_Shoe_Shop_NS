@@ -15,9 +15,14 @@ public class RepositoryAddToCart {
         this.password = properties.getProperty("password");
     }
 
-    public void addToNewCart(int customerId, int orderId, int shoeId) {
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/shoe_shop_db_new", name, password)) {
-            CallableStatement callableStatement = connection.prepareCall("CALL shoe_shop_db_new.addToCart(?,?,?)");
+    public String addToNewCart(int customerId, int orderId, int shoeId) {
+        String message = "";
+        Connection connection;
+        CallableStatement callableStatement;
+        ResultSet resultSet;
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/shoe_shop_db_new", name, password);
+            callableStatement = connection.prepareCall("CALL shoe_shop_db_new.addToCart(?,?,?)");
             callableStatement.setInt(1,customerId);
             callableStatement.setInt(2,orderId);
             callableStatement.setInt(3,shoeId);
@@ -25,15 +30,18 @@ public class RepositoryAddToCart {
             System.out.println("newCart");
             System.out.println("Customer: "+customerId +" Shoe: "+shoeId);
 
-            ResultSet rs = callableStatement.getResultSet();
-            String message = "";
-            while (rs.next()) {
-                message = rs.getString("complete");
+            resultSet = callableStatement.getResultSet();
+            while (resultSet.next()) {
+                message = resultSet.getString("complete");
             }
-            new CustomJop(message,"ok!");
+            resultSet.close();
+            callableStatement.close();
+            connection.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+        return message;
     }
 
     private int getLastIndex() {
@@ -49,14 +57,19 @@ public class RepositoryAddToCart {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        System.out.println("lastIndex: "+lastIndex);
         return lastIndex;
     }
 
-    public void addToExistingCart(int customerId, int shoeId) {
+    public String addToExistingCart(int customerId, int shoeId) {
         int lastIndex = getLastIndex();
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/shoe_shop_db_new", name, password)) {
-
-            CallableStatement callableStatement = connection.prepareCall("CALL shoe_shop_db_new.addToCart(?,?,?)");
+        String message = "";
+        Connection connection;
+        CallableStatement callableStatement;
+        ResultSet resultSet;
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/shoe_shop_db_new", name, password);
+            callableStatement = connection.prepareCall("CALL shoe_shop_db_new.addToCart(?,?,?)");
             callableStatement.setInt(1,customerId);
             callableStatement.setInt(2,lastIndex);
             callableStatement.setInt(3,shoeId);
@@ -64,15 +77,17 @@ public class RepositoryAddToCart {
             System.out.println("Existing Cart");
             System.out.println("Customer: "+customerId +" Shoe: "+shoeId);
 
-            ResultSet rs = callableStatement.getResultSet();
-            String message = "";
-            while (rs.next()) {
-                message = rs.getString("complete");
+            resultSet = callableStatement.getResultSet();
+            while (resultSet.next()) {
+                message = resultSet.getString("complete");
             }
-            new CustomJop(message,"ok!");
+            resultSet.close();
+            callableStatement.close();
+            connection.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        return message;
     }
 
 }
