@@ -137,7 +137,7 @@ public class ShoeDetails extends JPanel implements ActionListener {
     }
 
     public void updateInStock() {
-        inStock.setText(selectedShoe.getAmountInStock()+"");
+        inStock.setText("Number in stock: "+selectedShoe.getAmountInStock());
         repaint();
         revalidate();
     }

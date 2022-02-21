@@ -3,6 +3,9 @@ package dbconnection;
 import gui.CustomJop;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 
 public class RepositoryAddToCart {
@@ -45,14 +48,16 @@ public class RepositoryAddToCart {
     }
 
     private int getLastIndex() {
+        List<Integer> allOrderIds = new ArrayList<>();
         int lastIndex = 0;
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/shoe_shop_db_new", name, password)) {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT id FROM shoe_shop_db_new.shoe_order");
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                lastIndex = resultSet.getInt("id");
+                allOrderIds.add(resultSet.getInt("id"));
             }
+            lastIndex = Collections.max(allOrderIds);
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
