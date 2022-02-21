@@ -8,6 +8,7 @@ import gui.BaseFrame;
 import gui.CustomJop;
 import listeners.LogOutListener;
 import listeners.LoginListener;
+import listeners.ShoeDetailsListener;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -21,6 +22,7 @@ public class Controller {
     private PropertyReader propertyReader;
     private LoginListener loginListener;
     private LogOutListener logOutListener;
+    private ShoeDetailsListener shoeDetailsListener;
     private List<BaseProduct> productList;
     private RepositoryFindCustomer findCustomers;
 
@@ -33,6 +35,7 @@ public class Controller {
         base.startLogin();
         base.getLoginPanel().setLoginListener(loginListener);
         base.getShopPanel().setLogOutListener(logOutListener);
+        base.getShopPanel().getScrollablePanel().setShoeDetailsListener(shoeDetailsListener);
     }
 
     public void startConnection() {
@@ -75,6 +78,12 @@ public class Controller {
             user = null;
             base.removeShopPanel();
             base.startLogin();
+        };
+        shoeDetailsListener = product -> {
+            base.getShopPanel().getShoeDetails().setProduct(product);
+            base.getShopPanel().getShoeDetails().addDetails();
+            base.getShopPanel().removeScrollPane();
+            base.getShopPanel().addDetails();
         };
     }
 

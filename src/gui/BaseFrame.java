@@ -25,6 +25,7 @@ public class BaseFrame extends JFrame {
     private void setUpShopPanel() {
         shopPanel = new ShopPanel();
         shopPanel.addShop();
+        shopPanel.addScrollPane();
     }
 
     public void removeLogin() {

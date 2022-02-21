@@ -14,11 +14,10 @@ public class ShopPanel extends JPanel implements ActionListener {
     private final JMenu menu = new JMenu();
     private final JMenuItem logout = new JMenuItem();
     private LogOutListener logOutListener;
+    private final ShoeDetails shoeDetails = new ShoeDetails();
     private final ScrollablePanel scrollablePanel = new ScrollablePanel();
 
     public ShopPanel() {
-        setBackground(Colors.BG_DARK);
-        setLayout(new GridLayout());
         setUpMenu();
         setUp();
     }
@@ -33,6 +32,8 @@ public class ShopPanel extends JPanel implements ActionListener {
     }
 
     private void setUp() {
+        setBackground(Colors.BG_DARK);
+        setLayout(new GridBagLayout());
         scrollPane = new JScrollPane(scrollablePanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVisible(true);
     }
@@ -45,15 +46,53 @@ public class ShopPanel extends JPanel implements ActionListener {
         gc.ipady = 15;
         gc.gridwidth = GridBagConstraints.REMAINDER;
         gc.gridheight = GridBagConstraints.NORTH;
-        gc.insets = new Insets(0,10 ,0 ,10 );
+        gc.insets = new Insets(0,10 ,823 ,10 );
         add(menuBar,gc);
+        //gc.gridwidth = GridBagConstraints.REMAINDER;
+        //gc.insets = new Insets(110,20 ,60 ,20 );
+        //gc.ipadx = 800;
+        //gc.ipady = 700;
+        //gc.gridx = 2;
+        //gc.gridy = 2;
+        //add(scrollPane,gc);
+    }
+
+    public void addScrollPane() {
+        GridBagConstraints gc = new GridBagConstraints();
         gc.gridwidth = GridBagConstraints.REMAINDER;
         gc.insets = new Insets(110,20 ,60 ,20 );
-        gc.ipadx = 800;
+        gc.ipadx = 900;
         gc.ipady = 700;
         gc.gridx = 2;
         gc.gridy = 2;
         add(scrollPane,gc);
+        repaint();
+        revalidate();
+    }
+
+    public void removeScrollPane() {
+        remove(scrollPane);
+    }
+
+    public void removeDetails() {
+        remove(shoeDetails);
+    }
+
+    public void addDetails() {
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.gridwidth = GridBagConstraints.REMAINDER;
+        gc.insets = new Insets(110,20 ,60 ,20 );
+        gc.ipadx = 400;
+        gc.ipady = 300;
+        gc.gridx = 2;
+        gc.gridy = 2;
+        add(shoeDetails,gc);
+        repaint();
+        revalidate();
+    }
+
+    public ShoeDetails getShoeDetails() {
+        return shoeDetails;
     }
 
     public ScrollablePanel getScrollablePanel() {

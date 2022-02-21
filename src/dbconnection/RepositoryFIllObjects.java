@@ -90,7 +90,7 @@ public class RepositoryFIllObjects {
         CompleteShoe shoe = null;
         List<CompleteShoe> shoes = new ArrayList<>();
         String query = "select * from shoe_shop_db_new.shoe inner join shoe_shop_db_new.base_product on " +
-                "shoe.baseProductId = base_product.id where shoe.id = ?";
+                "shoe.baseProductId = base_product.id where base_product.id = ?";
 
         try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/shoe_shop_db_new", name, password);
              PreparedStatement stmt = con.prepareStatement(query)) {

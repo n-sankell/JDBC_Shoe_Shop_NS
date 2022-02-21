@@ -14,12 +14,21 @@ import java.util.Map;
 public class ScrollablePanel extends JPanel implements ActionListener {
 
     private ShoeDetailsListener shoeDetailsListener;
+    private DisplayLabel alternative = new DisplayLabel("");
+    private BaseProduct baseProduct;
     private final Map<BaseProduct,DisplayLabel> allProducts = new HashMap<>();
 
     public ScrollablePanel() {
+        setUp();
+    }
+
+    private void setUp() {
         setVisible(true);
         setBackground(Colors.BG_BRIGHT);
-        setUp();
+        GridLayout grid = new GridLayout(allProducts.size()/3,3);
+        grid.setHgap(40);
+        grid.setVgap(40);
+        setLayout(grid);
     }
 
     public void fillMap(List<BaseProduct> products) {
@@ -37,11 +46,13 @@ public class ScrollablePanel extends JPanel implements ActionListener {
         }
     }
 
-    private void setUp() {
-        GridLayout grid = new GridLayout(allProducts.size()/3,3);
-        grid.setHgap(40);
-        grid.setVgap(40);
-        setLayout(grid);
+    private BaseProduct findAlternative() {
+        for (Map.Entry<BaseProduct, DisplayLabel> entry: allProducts.entrySet()) {
+            if (entry.getValue() == alternative) {
+                baseProduct = entry.getKey();
+            }
+        }
+        return baseProduct;
     }
 
     public void setShoeDetailsListener(ShoeDetailsListener shoeDetailsListener) {
@@ -50,7 +61,7 @@ public class ScrollablePanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
-
+        alternative = (DisplayLabel) e.getSource();
+        shoeDetailsListener.detailEventOccurred(findAlternative());
     }
 }
