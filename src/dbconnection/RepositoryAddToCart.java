@@ -1,5 +1,7 @@
 package dbconnection;
 
+import gui.CustomJop;
+
 import java.sql.*;
 import java.util.Properties;
 
@@ -23,6 +25,12 @@ public class RepositoryAddToCart {
             System.out.println("newCart");
             System.out.println("Customer: "+customerId +" Shoe: "+shoeId);
 
+            ResultSet rs = callableStatement.getResultSet();
+            String message = "";
+            while (rs.next()) {
+                message = rs.getString("complete");
+            }
+            new CustomJop(message,"ok!");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -56,6 +64,12 @@ public class RepositoryAddToCart {
             System.out.println("Existing Cart");
             System.out.println("Customer: "+customerId +" Shoe: "+shoeId);
 
+            ResultSet rs = callableStatement.getResultSet();
+            String message = "";
+            while (rs.next()) {
+                message = rs.getString("complete");
+            }
+            new CustomJop(message,"ok!");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
