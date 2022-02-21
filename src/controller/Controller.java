@@ -6,10 +6,7 @@ import dbconnection.RepositoryFindCustomer;
 import dbobjectmodel.BaseProduct;
 import gui.BaseFrame;
 import gui.CustomJop;
-import listeners.GoBackListener;
-import listeners.LogOutListener;
-import listeners.LoginListener;
-import listeners.ShoeDetailsListener;
+import listeners.*;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -24,6 +21,7 @@ public class Controller {
     private LoginListener loginListener;
     private LogOutListener logOutListener;
     private ShoeDetailsListener shoeDetailsListener;
+    private AddToCartListener addToCartListener;
     private GoBackListener goBackListener;
     private List<BaseProduct> productList;
     private RepositoryFindCustomer findCustomers;
@@ -51,7 +49,7 @@ public class Controller {
 
     private void addToCart(int customerId, int orderId, int shoeId) {
         RepositoryAddToCart repositoryAddToCart = new RepositoryAddToCart(propertyReader.properties);
-        repositoryAddToCart.addToCart(customerId, orderId, shoeId);
+        repositoryAddToCart.addToNewCart(customerId, orderId, shoeId);
     }
 
     private void loadCustomersFromServer() {
@@ -92,7 +90,19 @@ public class Controller {
             base.getShopPanel().addDetails();
         };
         goBackListener = () -> {
-
+            base.getShopPanel().removeDetails();
+            base.getShopPanel().createDetailPanel();
+            setUpListeners();
+            base.getShopPanel().addScrollPane();
+        };
+        addToCartListener = (shoe) -> {
+            RepositoryAddToCart repositoryAddToCart = new RepositoryAddToCart(propertyReader.properties);
+            if (user.getShoes().isEmpty()) {
+                repositoryAddToCart.addToNewCart(user.getId(),0,shoe.getId());
+            } else {
+                repositoryAddToCart.addToExistingCart(user.getId(),shoe.getId());
+            }
+            user.addShoe(shoe);
         };
     }
 
@@ -100,6 +110,7 @@ public class Controller {
         base.getShopPanel().setLogOutListener(logOutListener);
         base.getShopPanel().getScrollablePanel().setShoeDetailsListener(shoeDetailsListener);
         base.getShopPanel().getShoeDetails().setGoBackListener(goBackListener);
+        base.getShopPanel().getShoeDetails().setAddToCartListener(addToCartListener);
     }
 
     private static class PropertyReader {

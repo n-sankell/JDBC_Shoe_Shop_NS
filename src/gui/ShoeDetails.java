@@ -4,6 +4,7 @@ import dbobjectmodel.BaseProduct;
 import dbobjectmodel.Category;
 import dbobjectmodel.CompleteShoe;
 import dbobjectmodel.ShoeColor;
+import listeners.AddToCartListener;
 import listeners.GoBackListener;
 
 import javax.swing.*;
@@ -27,7 +28,10 @@ public class ShoeDetails extends JPanel implements ActionListener {
     private JPanel optionPanel;
     private JLabel inStock;
     private JLabel colors;
+    private int optionCounter = 0;
+    private int addedProductCounter = 0;
     private GoBackListener goBackListener;
+    private AddToCartListener addToCartListener;
     private DisplayLabel selected;
     private CompleteShoe selectedShoe;
     private StringBuilder categoryString;
@@ -49,8 +53,11 @@ public class ShoeDetails extends JPanel implements ActionListener {
         backButton = new CustomButton("Go back");
         backButton.addActionListener(this);
         addToCartButton = new CustomButton("Add to cart");
+        addToCartButton.addActionListener(this);
         viewCartButton = new CustomButton("View cart");
+        viewCartButton.addActionListener(this);
         checkOutButton = new CustomButton("Checkout");
+        checkOutButton.addActionListener(this);
         GridLayout optionGrid = new GridLayout(1,4);
         optionPanel = new JPanel();
         optionPanel.setLayout(optionGrid);
@@ -209,6 +216,10 @@ public class ShoeDetails extends JPanel implements ActionListener {
         this.goBackListener = goBackListener;
     }
 
+    public void setAddToCartListener(AddToCartListener addToCartListener) {
+        this.addToCartListener = addToCartListener;
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         colorString = new StringBuilder();
@@ -217,15 +228,24 @@ public class ShoeDetails extends JPanel implements ActionListener {
             removeDetails();
             goBackListener.goBackEvent();
         } else if (e.getSource() == addToCartButton) {
-            checkOutButton.addActionListener(this);
-            System.out.println("Add to cart");
+            if (optionCounter > 0) {
+                addToCartListener.productAdded(selectedShoe);
+                addedProductCounter++;
+            }
         } else if (e.getSource() == viewCartButton) {
             System.out.println("view cart");
+        } else if (e.getSource() == checkOutButton) {
+            if (addedProductCounter > 0) {
+                System.out.println("Checkout available!");
+                addedProductCounter = 0;
+                optionCounter = 0;
+            }
+            System.out.println("Checkout not available");
         } else {
             selected = (DisplayLabel) e.getSource();
+            optionCounter++;
             findSelected();
             setTextFromSelected();
-            addToCartButton.addActionListener(this);
         }
     }
 }

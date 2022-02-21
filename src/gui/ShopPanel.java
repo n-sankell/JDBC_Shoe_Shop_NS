@@ -14,7 +14,7 @@ public class ShopPanel extends JPanel implements ActionListener {
     private final JMenu menu = new JMenu();
     private final JMenuItem logout = new JMenuItem();
     private LogOutListener logOutListener;
-    private final ShoeDetails shoeDetails = new ShoeDetails();
+    private ShoeDetails shoeDetails = new ShoeDetails();
     private final ScrollablePanel scrollablePanel = new ScrollablePanel();
 
     public ShopPanel() {
@@ -76,6 +76,10 @@ public class ShopPanel extends JPanel implements ActionListener {
 
     public void removeDetails() {
         remove(shoeDetails);
+    }
+
+    public void createDetailPanel() {
+        shoeDetails = new ShoeDetails();
     }
 
     public void addDetails() {
