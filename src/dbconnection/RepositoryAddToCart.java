@@ -41,7 +41,7 @@ public class RepositoryAddToCart {
             callableStatement.close();
             connection.close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            new CustomJop(e.getMessage(), "ok");
         }
 
         return message;
@@ -90,7 +90,7 @@ public class RepositoryAddToCart {
             callableStatement.close();
             connection.close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            new CustomJop(e.getMessage(), "ok");
         }
         return message;
     }

@@ -5,17 +5,16 @@ import dbobjectmodel.Category;
 import dbobjectmodel.CompleteShoe;
 import dbobjectmodel.ShoeColor;
 import listeners.AddToCartListener;
+import listeners.CheckoutListener;
 import listeners.GoBackListener;
+import listeners.ViewCartListener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-
 
 public class ShoeDetails extends JPanel implements ActionListener {
 
@@ -32,6 +31,8 @@ public class ShoeDetails extends JPanel implements ActionListener {
     private int addedProductCounter = 0;
     private GoBackListener goBackListener;
     private AddToCartListener addToCartListener;
+    private CheckoutListener checkoutListener;
+    private ViewCartListener viewCartListener;
     private DisplayLabel selected;
     private CompleteShoe selectedShoe;
     private StringBuilder categoryString;
@@ -56,15 +57,16 @@ public class ShoeDetails extends JPanel implements ActionListener {
         addToCartButton.addActionListener(this);
         viewCartButton = new CustomButton("View cart");
         viewCartButton.addActionListener(this);
-        checkOutButton = new CustomButton("Checkout");
-        checkOutButton.addActionListener(this);
-        GridLayout optionGrid = new GridLayout(1,4);
+        //checkOutButton = new CustomButton("Checkout");
+        //checkOutButton.addActionListener(this);
+        GridLayout optionGrid = new GridLayout(1,3);
+        optionGrid.setHgap(10);
         optionPanel = new JPanel();
         optionPanel.setLayout(optionGrid);
-        optionPanel.setBackground(Color.ORANGE);
+        optionPanel.setBackground(Colors.BG_BRIGHT);
         optionPanel.add(backButton);
         optionPanel.add(viewCartButton);
-        optionPanel.add(checkOutButton);
+        //optionPanel.add(checkOutButton);
         optionPanel.add(addToCartButton);
         selected = new DisplayLabel("");
         title = new JLabel();
@@ -218,6 +220,19 @@ public class ShoeDetails extends JPanel implements ActionListener {
         }
     }
 
+    public void resetCounters() {
+        optionCounter = 0;
+        addedProductCounter = 0;
+    }
+
+    public void setCheckoutListener(CheckoutListener checkoutListener) {
+        this.checkoutListener = checkoutListener;
+    }
+
+    public void setViewCartListener(ViewCartListener viewCartListener) {
+        this.viewCartListener = viewCartListener;
+    }
+
     public void setGoBackListener(GoBackListener goBackListener) {
         this.goBackListener = goBackListener;
     }
@@ -232,6 +247,7 @@ public class ShoeDetails extends JPanel implements ActionListener {
         categoryString = new StringBuilder();
         if (e.getSource() == backButton) {
             removeDetails();
+            optionCounter = 0;
             goBackListener.goBackEvent();
         } else if (e.getSource() == addToCartButton) {
             if (optionCounter > 0) {
@@ -239,14 +255,7 @@ public class ShoeDetails extends JPanel implements ActionListener {
                 addedProductCounter++;
             }
         } else if (e.getSource() == viewCartButton) {
-            System.out.println("view cart");
-        } else if (e.getSource() == checkOutButton) {
-            if (addedProductCounter > 0) {
-                System.out.println("Checkout available!");
-                addedProductCounter = 0;
-                optionCounter = 0;
-            }
-            System.out.println("Checkout not available");
+            viewCartListener.viewCartEvent();
         } else {
             selected = (DisplayLabel) e.getSource();
             optionCounter++;

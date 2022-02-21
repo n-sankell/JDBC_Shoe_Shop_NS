@@ -4,8 +4,10 @@ import dbconnection.RepositoryAddToCart;
 import dbconnection.RepositoryFIllObjects;
 import dbconnection.RepositoryFindCustomer;
 import dbobjectmodel.BaseProduct;
+import dbobjectmodel.CompleteShoe;
 import gui.BaseFrame;
 import gui.CustomJop;
+import gui.ViewCartFrame;
 import listeners.*;
 
 import java.io.FileInputStream;
@@ -23,8 +25,11 @@ public class Controller {
     private ShoeDetailsListener shoeDetailsListener;
     private AddToCartListener addToCartListener;
     private GoBackListener goBackListener;
+    private CheckoutListener checkoutListener;
+    private ViewCartListener viewCartListener;
     private List<BaseProduct> productList;
     private RepositoryFindCustomer findCustomers;
+    private ViewCartFrame viewCartFrame;
 
     public Controller() {
         setEventHandler();
@@ -63,9 +68,12 @@ public class Controller {
             findCustomers.getCustomers().stream()
                     .filter(customer -> customer.getName().equals(username) && customer.getPassword().equals(password))
                     .toList().forEach(customer -> user = new User(customer.getId(), customer.getName()));
+
             String message = user == null ? "Username and password do not match! " : "Welcome "+user.getName()+"!";
             String buttonText = user == null ? "Try again" : "Let's shop!";
+
             new CustomJop(message, buttonText);
+
             if (user != null) {
                 base.removeLogin();
                 base.setUpShopPanel();
@@ -110,6 +118,21 @@ public class Controller {
                 base.getShopPanel().getShoeDetails().updateInStock();
             }
         };
+        checkoutListener = () -> {
+            new CustomJop("Thank you for your purchase!","ok");
+            viewCartFrame.dispose();
+            user.clearShoes();
+            base.getShopPanel().getShoeDetails().resetCounters();
+        };
+        viewCartListener = () -> {
+            if (user.getShoes().isEmpty()) {
+                new CustomJop("Your cart is empty!","ok");
+            } else {
+                viewCartFrame = new ViewCartFrame(user.getShoes());
+                viewCartFrame.setVisible(true);
+                viewCartFrame.setCheckoutListener(checkoutListener);
+            }
+        };
     }
 
     private void setUpListeners() {
@@ -117,6 +140,7 @@ public class Controller {
         base.getShopPanel().getScrollablePanel().setShoeDetailsListener(shoeDetailsListener);
         base.getShopPanel().getShoeDetails().setGoBackListener(goBackListener);
         base.getShopPanel().getShoeDetails().setAddToCartListener(addToCartListener);
+        base.getShopPanel().getShoeDetails().setViewCartListener(viewCartListener);
     }
 
     private static class PropertyReader {
