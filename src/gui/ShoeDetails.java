@@ -4,13 +4,16 @@ import dbobjectmodel.BaseProduct;
 import dbobjectmodel.Category;
 import dbobjectmodel.CompleteShoe;
 import dbobjectmodel.ShoeColor;
+import listeners.GoBackListener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class ShoeDetails extends JPanel implements ActionListener {
@@ -20,40 +23,114 @@ public class ShoeDetails extends JPanel implements ActionListener {
     private JLabel size;
     private JLabel categories;
     private JPanel alternativePanel;
-    private DisplayLabel selected = new DisplayLabel("");
-    private final StringBuilder categoryString = new StringBuilder("");
-    private List<ShoeColor> colors = new ArrayList<>();
-    private List<CompleteShoe> alternatives = new ArrayList<>();
+    private JPanel detailPanel;
+    private JPanel optionPanel;
+    private JLabel inStock;
+    private JLabel colors;
+    private GoBackListener goBackListener;
+    private DisplayLabel selected;
+    private CompleteShoe selectedShoe;
+    private StringBuilder categoryString;
+    private StringBuilder colorString;
+    private CustomButton backButton;
+    private CustomButton viewCartButton;
+    private CustomButton checkOutButton;
+    private CustomButton addToCartButton;
+    private List<CompleteShoe> alternatives;
+    private HashMap<CompleteShoe,DisplayLabel> alternativesMap;
 
     public ShoeDetails() {
         setUp();
     }
 
-    private void setUp() {
+    public void setUp() {
         setVisible(true);
         setBackground(Colors.BG_BRIGHT);
+        backButton = new CustomButton("Go back");
+        backButton.addActionListener(this);
+        addToCartButton = new CustomButton("Add to cart");
+        viewCartButton = new CustomButton("View cart");
+        checkOutButton = new CustomButton("Checkout");
+        GridLayout optionGrid = new GridLayout(1,4);
+        optionPanel = new JPanel();
+        optionPanel.setLayout(optionGrid);
+        optionPanel.setBackground(Color.ORANGE);
+        optionPanel.add(backButton);
+        optionPanel.add(viewCartButton);
+        optionPanel.add(checkOutButton);
+        optionPanel.add(addToCartButton);
+        selected = new DisplayLabel("");
         title = new JLabel();
         title.setFont(getFont().deriveFont(Font.BOLD,36f));
+        title.setForeground(Colors.TEXT);
         categories = new JLabel();
-        categories.setFont(getFont().deriveFont(Font.BOLD,36f));
+        categories.setFont(getFont().deriveFont(Font.BOLD,25f));
+        categories.setForeground(Colors.TEXT);
         price = new JLabel();
-        price.setFont(getFont().deriveFont(Font.BOLD,36f));
+        price.setFont(getFont().deriveFont(Font.BOLD,20f));
+        price.setForeground(Colors.TEXT);
         size = new JLabel();
-        size.setFont(getFont().deriveFont(Font.BOLD,36f));
+        size.setFont(getFont().deriveFont(Font.BOLD,20f));
+        size.setForeground(Colors.TEXT);
+        inStock = new JLabel();
+        inStock.setFont(getFont().deriveFont(Font.BOLD,20f));
+        inStock.setForeground(Colors.TEXT);
+        colors = new JLabel();
+        colors.setFont(getFont().deriveFont(Font.BOLD,20f));
+        colors.setForeground(Colors.TEXT);
         alternativePanel = new JPanel();
         alternativePanel.setBackground(Colors.BG_BRIGHT);
+        alternativePanel.setPreferredSize(new Dimension(800,50));
+        detailPanel = new JPanel();
+        GridLayout grid = new GridLayout(2,3);
+        detailPanel.setLayout(grid);
+        detailPanel.setBackground(Colors.BG_BRIGHT);
+        detailPanel.setPreferredSize(new Dimension(700,50));
+        detailPanel.setBackground(Colors.BG_BRIGHT);
+        grid.setVgap(2);
+        grid.setHgap(2);
     }
 
-    private void addAlternatives() {
+    public void removeDetails() {
+        selected = new DisplayLabel("");
+        title.setText("");
+        remove(title);
+        categories.setText("");
+        remove(categories);
+        price.setText("");
+        detailPanel.remove(price);
+        size.setText("");
+        detailPanel.remove(size);
+        colors.setText("");
+        detailPanel.remove(colors);
+        inStock.setText("");
+        detailPanel.remove(inStock);
+        remove(detailPanel);
+        repaint();
+        revalidate();
+    }
+
+    private void addAlternativesToMap() {
         int count = 1;
-        for (CompleteShoe ignored : alternatives) {
-            alternativePanel.add(new DisplayLabel("Option "+count));
+        alternativesMap = new HashMap<>();
+        for (CompleteShoe alternative : alternatives) {
+            alternativesMap.put(alternative, new DisplayLabel("Option "+count));
             count++;
             System.out.println(count);
         }
     }
 
+    private void addAlternatives() {
+        for (DisplayLabel entry: alternativesMap.values()) {
+            entry.addActionListener(this);
+            alternativePanel.add(entry);
+        }
+        repaint();
+        revalidate();
+    }
+
     private void setCategories(BaseProduct product) {
+        categoryString = new StringBuilder();
         for (Category category: product.getCategories()) {
             categoryString.append(category.getName()).append(", ");
         }
@@ -61,10 +138,12 @@ public class ShoeDetails extends JPanel implements ActionListener {
     }
 
     public void setProduct(BaseProduct product) {
+        alternatives = new ArrayList<>();
         title.setText(product.getLabel().getName()+" "+product.getName());
         alternatives = product.getShoes();
         setCategories(product);
         categories.setText(categoryString.toString());
+        addAlternativesToMap();
         addAlternatives();
     }
 
@@ -73,32 +152,80 @@ public class ShoeDetails extends JPanel implements ActionListener {
         setLayout(gb);
         GridBagConstraints gc = new GridBagConstraints();
         gc.insets = new Insets(10,10,10,10);
-        gc.gridx = 1;
         gc.gridy = 0;
+        gc.gridx = 1;
         gc.ipady = 10;
         gc.ipadx = 10;
-        add(title,gc);
+        gc.gridwidth = GridBagConstraints.RELATIVE;
+        add(optionPanel,gc);
         gc.gridx = 1;
         gc.gridy = 1;
-        add(categories,gc);
+        gc.ipady = 10;
+        gc.ipadx = 10;
+        gc.gridwidth = GridBagConstraints.REMAINDER;
+        add(title,gc);
         gc.gridx = 1;
         gc.gridy = 2;
-        add(price,gc);
+        add(categories,gc);
         gc.gridx = 1;
         gc.gridy = 3;
-        add(size,gc);
+        add(detailPanel,gc);
         gc.gridx = 1;
         gc.gridy = 4;
+        detailPanel.add(price);
+        detailPanel.add(size);
+        detailPanel.add(colors);
+        detailPanel.add(new JLabel(" "));
+        detailPanel.add(inStock);
+        detailPanel.add(new JLabel(" "));
         add(alternativePanel,gc);
+        repaint();
+        revalidate();
     }
 
     private void setTextFromSelected() {
+        colorString = new StringBuilder("Colors: ");
+        price.setText("Price: "+selectedShoe.getPrice().getPrice());
+        size.setText("Size: "+selectedShoe.getSize().getSize());
+        inStock.setText("Number in stock: "+selectedShoe.getAmountInStock());
+        for (ShoeColor color : selectedShoe.getColors()) {
+            colorString.append(color.getName()).append(", ");
+        }
+        colorString.setLength(colorString.length()-2);
+        colors.setText(colorString.toString());
+        repaint();
+        revalidate();
+    }
 
+    private void findSelected() {
+        for (Map.Entry<CompleteShoe, DisplayLabel> entry: alternativesMap.entrySet()) {
+            if (entry.getValue() == selected) {
+                selectedShoe = entry.getKey();
+            }
+        }
+    }
+
+    public void setGoBackListener(GoBackListener goBackListener) {
+        this.goBackListener = goBackListener;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        selected = (DisplayLabel) e.getSource();
-        setTextFromSelected();
+        colorString = new StringBuilder();
+        categoryString = new StringBuilder();
+        if (e.getSource() == backButton) {
+            removeDetails();
+            goBackListener.goBackEvent();
+        } else if (e.getSource() == addToCartButton) {
+            checkOutButton.addActionListener(this);
+            System.out.println("Add to cart");
+        } else if (e.getSource() == viewCartButton) {
+            System.out.println("view cart");
+        } else {
+            selected = (DisplayLabel) e.getSource();
+            findSelected();
+            setTextFromSelected();
+            addToCartButton.addActionListener(this);
+        }
     }
 }

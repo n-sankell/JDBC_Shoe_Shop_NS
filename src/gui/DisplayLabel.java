@@ -19,7 +19,7 @@ public class DisplayLabel extends JButton {
         setPreferredSize(new Dimension(150, 50));
         setMaximumSize(new Dimension(150, 50));
         setFocusPainted(false);
-        setBackground(Colors.TEXT);
+        setBackground(Colors.DISPLAY_LABEL_BG);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class DisplayLabel extends JButton {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        g2.setColor(Colors.BUTTON_ROLL_OVER);
+        g2.setColor(Colors.DISPLAY_LABEL_BORDER);
         g2.setStroke(new BasicStroke(8));
 
         Dimension size = getSize();

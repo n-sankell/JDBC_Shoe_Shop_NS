@@ -7,7 +7,6 @@ public class CustomButton extends JButton {
 
     private final String text;
 
-
     @Override
     public String getText() {
         return text;
@@ -57,5 +56,7 @@ public class CustomButton extends JButton {
         Dimension size = getSize();
         g2.drawRect(0,0, size.width, size.height);
     }
+
+
 
 }

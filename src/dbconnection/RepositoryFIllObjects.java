@@ -87,7 +87,7 @@ public class RepositoryFIllObjects {
     }
 
     private List<CompleteShoe> getCompleteShoByProdId(int id, BaseProduct product) {
-        CompleteShoe shoe = null;
+        CompleteShoe shoe;
         List<CompleteShoe> shoes = new ArrayList<>();
         String query = "select * from shoe_shop_db_new.shoe inner join shoe_shop_db_new.base_product on " +
                 "shoe.baseProductId = base_product.id where base_product.id = ?";

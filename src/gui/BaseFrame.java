@@ -1,7 +1,5 @@
 package gui;
 
-import controller.User;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -14,7 +12,6 @@ public class BaseFrame extends JFrame {
     public BaseFrame() {
         super("Shoe Shop!");
         setUpLogin();
-        setUpShopPanel();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(new Dimension(1200,900));
         setLocation(300,100);
@@ -22,18 +19,21 @@ public class BaseFrame extends JFrame {
         setVisible(true);
     }
 
-    private void setUpShopPanel() {
+    public void setUpShopPanel() {
         shopPanel = new ShopPanel();
         shopPanel.addShop();
-        shopPanel.addScrollPane();
     }
 
     public void removeLogin() {
         remove(loginPanel);
+        repaint();
+        revalidate();
     }
 
     public void removeShopPanel() {
         remove(shopPanel);
+        repaint();
+        revalidate();
     }
 
     public void addShopPanel() {

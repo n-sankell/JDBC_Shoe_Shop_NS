@@ -6,6 +6,7 @@ import dbconnection.RepositoryFindCustomer;
 import dbobjectmodel.BaseProduct;
 import gui.BaseFrame;
 import gui.CustomJop;
+import listeners.GoBackListener;
 import listeners.LogOutListener;
 import listeners.LoginListener;
 import listeners.ShoeDetailsListener;
@@ -23,6 +24,7 @@ public class Controller {
     private LoginListener loginListener;
     private LogOutListener logOutListener;
     private ShoeDetailsListener shoeDetailsListener;
+    private GoBackListener goBackListener;
     private List<BaseProduct> productList;
     private RepositoryFindCustomer findCustomers;
 
@@ -34,8 +36,6 @@ public class Controller {
         base = new BaseFrame();
         base.startLogin();
         base.getLoginPanel().setLoginListener(loginListener);
-        base.getShopPanel().setLogOutListener(logOutListener);
-        base.getShopPanel().getScrollablePanel().setShoeDetailsListener(shoeDetailsListener);
     }
 
     public void startConnection() {
@@ -70,12 +70,18 @@ public class Controller {
             new CustomJop(message, buttonText);
             if (user != null) {
                 base.removeLogin();
+                base.setUpShopPanel();
+                setUpListeners();
                 base.addShopPanel();
+                base.getShopPanel().addScrollPane();
                 base.getShopPanel().getScrollablePanel().fillMap(productList);
             }
         };
         logOutListener = () -> {
             user = null;
+            base.getShopPanel().getShoeDetails().removeDetails();
+            base.getShopPanel().removeDetails();
+            base.getShopPanel().addScrollPane();
             base.removeShopPanel();
             base.startLogin();
         };
@@ -85,6 +91,15 @@ public class Controller {
             base.getShopPanel().removeScrollPane();
             base.getShopPanel().addDetails();
         };
+        goBackListener = () -> {
+
+        };
+    }
+
+    private void setUpListeners() {
+        base.getShopPanel().setLogOutListener(logOutListener);
+        base.getShopPanel().getScrollablePanel().setShoeDetailsListener(shoeDetailsListener);
+        base.getShopPanel().getShoeDetails().setGoBackListener(goBackListener);
     }
 
     private static class PropertyReader {

@@ -10,6 +10,7 @@ public class Colors {
     public static final Color BUTTON_BORDER = new Color(60, 188, 195);
     public static final Color BUTTON_PRESSED = new Color(255, 104, 100);
     public static final Color BUTTON_ROLL_OVER = new Color(194, 14, 40);
-
+    public static final Color DISPLAY_LABEL_BG = new Color(180, 133, 63);
+    public static final Color DISPLAY_LABEL_BORDER = new Color(148, 110, 55);
 
 }
