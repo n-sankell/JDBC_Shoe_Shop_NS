@@ -22,7 +22,7 @@ public class RepositoryAverage {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                String average = resultSet.getString("Label")+" "+resultSet.getString("Produkt")+" Score: "+resultSet.getDouble("Medelbetyg")+" "+resultSet.getString("Rating");
+                String average = resultSet.getString("Label")+"\t "+resultSet.getString("Produkt")+"\tScore: "+resultSet.getDouble("Medelbetyg")+"\t "+resultSet.getString("Rating");
                 averageForAll.add(average);
             }
 

@@ -6,6 +6,7 @@ import dbconnection.RepositoryFIllObjects;
 import dbconnection.RepositoryFindCustomer;
 import dbobjectmodel.BaseProduct;
 import dbobjectmodel.Customer;
+import gui.AllAveragesFrame;
 import gui.BaseFrame;
 import gui.CustomJop;
 import gui.ViewCartFrame;
@@ -23,6 +24,7 @@ public class Controller {
     private PropertyReader propertyReader;
     private LoginListener loginListener;
     private LogOutListener logOutListener;
+    private AllAveragesListener allAveragesListener;
     private ShoeDetailsListener shoeDetailsListener;
     private AddToCartListener addToCartListener;
     private GoBackListener goBackListener;
@@ -32,6 +34,7 @@ public class Controller {
     private List<BaseProduct> productList;
     private List<String> allAverages;
     private ViewCartFrame viewCartFrame;
+    private AllAveragesFrame allAveragesFrame;
     private Customer currentCustomer;
 
     public Controller() {
@@ -54,7 +57,6 @@ public class Controller {
     private void populateAverageList() {
         RepositoryAverage averageRepo = new RepositoryAverage(propertyReader.properties);
         allAverages = averageRepo.getAverageScoreTable();
-        allAverages.forEach(System.out::println);
     }
 
     private void populateShoeList() {
@@ -146,9 +148,15 @@ public class Controller {
                 viewCartFrame.setCheckoutListener(checkoutListener);
             }
         };
+        allAveragesListener = () -> {
+          allAveragesFrame = new AllAveragesFrame(allAverages);
+          allAveragesFrame.setVisible(true);
+        };
+
     }
 
     private void setUpListeners() {
+        base.getShopPanel().setAllAveragesListener(allAveragesListener);
         base.getShopPanel().setLogOutListener(logOutListener);
         base.getShopPanel().getScrollablePanel().setShoeDetailsListener(shoeDetailsListener);
         base.getShopPanel().getShoeDetails().setGoBackListener(goBackListener);
