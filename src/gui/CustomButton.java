@@ -50,7 +50,7 @@ public class CustomButton extends JButton {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        g2.setColor(Colors.BUTTON_ROLL_OVER);
+        g2.setColor(Colors.BUTTON_BORDER);
         g2.setStroke(new BasicStroke(8));
 
         Dimension size = getSize();

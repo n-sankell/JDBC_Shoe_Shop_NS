@@ -155,10 +155,55 @@ public class RepositoryFIllObjects {
         return label;
     }
 
+    private List<Comment> getCommentsByBaseProductId(int baseProductId, BaseProduct product) {
+        List<Comment> comments = new ArrayList<>();
+        String query = "select * from shoe_shop_db_new.customer_comment "+
+                "inner join shoe_shop_db_new.base_product on customer_comment.productId = base_product.id where base_product.id = ?";
 
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/shoe_shop_db_new", name, password)) {
+            PreparedStatement stmt = con.prepareStatement(query);
+            stmt.setString(1, baseProductId+"");
+            ResultSet rs = stmt.executeQuery();
 
-    private List<Rating> getRatingByBaseProductId(int baseProductId) {
+            while (rs.next()) {
+                int id = rs.getInt("id"); String text = rs.getString("commentText"); int customerId = rs.getInt("customerId");
+                int productId = rs.getInt("productId"); Date date = rs.getDate("date");
+                Comment comment = new Comment(id,text,customerId,productId,date);
+                comment.setBaseProduct(product);
+                comments.add(comment);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return comments;
+    }
+
+    private RatingGrade getRatingGradeByRatingId(int ratingId) {
+        RatingGrade grade = null;
+        String query = "select * from shoe_shop_db_new.rating_grade "+
+                "inner join shoe_shop_db_new.customer_rating on customer_rating.gradeId = rating_grade.id where rating_grade.id = ?";
+
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/shoe_shop_db_new", name, password)) {
+            PreparedStatement stmt = con.prepareStatement(query);
+            stmt.setString(1, ratingId+"");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                grade = new RatingGrade(rs.getInt("id"),rs.getString("grade"),
+                        rs.getInt("gradeNumber"), rs.getDate("date"));
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return grade;
+    }
+
+    private List<Rating> getRatingByBaseProductId(int baseProductId, BaseProduct product) {
         List<Rating> ratings = new ArrayList<>();
+        RatingGrade grade;
         String query = "select * from shoe_shop_db_new.customer_rating "+
                 "inner join shoe_shop_db_new.base_product on customer_rating.productId = base_product.id where base_product.id = ?";
 
@@ -168,10 +213,14 @@ public class RepositoryFIllObjects {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                ratings.add(new Rating(rs.getInt("id"),rs.getInt("gradeId"),rs.getInt("customerId"),
-                        rs.getInt("productId"),rs.getDate("date")));
+                int id = rs.getInt("id"); int gradeId = rs.getInt("gradeId"); int customerId = rs.getInt("customerId");
+                int productId = rs.getInt("productId"); Date date = rs.getDate("date");
+                Rating rating = new Rating(id,gradeId,customerId,productId,date);
+                grade = getRatingGradeByRatingId(rating.getId());
+                rating.setGrade(grade);
+                rating.setProduct(product);
+                ratings.add(rating);
             }
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -181,8 +230,7 @@ public class RepositoryFIllObjects {
     private BaseProduct getBaseProductById(int id) {
         BaseProduct product = null;
         Label label = getLabelByProductId(id);
-        List<Rating> ratings;
-        List<Comment> comments;
+
         List<Category> categories = getCategoriesByBaseProductId(id);
                 String query = "select * from shoe_shop_db_new.base_product where base_product.id = ?";
 
@@ -198,6 +246,10 @@ public class RepositoryFIllObjects {
                 product.setLabel(label);
                 categories.forEach(product::addCategory);
                 shoes.forEach(product::addShoe);
+                List<Rating> ratings = getRatingByBaseProductId(id, product);
+                List<Comment> comments = getCommentsByBaseProductId(id, product);
+                ratings.forEach(product::addRating);
+                comments.forEach(product::addComment);
             }
 
         } catch (Exception e) {

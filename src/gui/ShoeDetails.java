@@ -57,8 +57,6 @@ public class ShoeDetails extends JPanel implements ActionListener {
         addToCartButton.addActionListener(this);
         viewCartButton = new CustomButton("View cart");
         viewCartButton.addActionListener(this);
-        //checkOutButton = new CustomButton("Checkout");
-        //checkOutButton.addActionListener(this);
         GridLayout optionGrid = new GridLayout(1,3);
         optionGrid.setHgap(10);
         optionPanel = new JPanel();
@@ -66,7 +64,6 @@ public class ShoeDetails extends JPanel implements ActionListener {
         optionPanel.setBackground(Colors.BG_BRIGHT);
         optionPanel.add(backButton);
         optionPanel.add(viewCartButton);
-        //optionPanel.add(checkOutButton);
         optionPanel.add(addToCartButton);
         selected = new DisplayLabel("");
         title = new JLabel();
@@ -158,6 +155,8 @@ public class ShoeDetails extends JPanel implements ActionListener {
         alternatives = product.getShoes();
         setCategories(product);
         categories.setText(categoryString.toString());
+        product.getComments().forEach(System.out::println);
+        product.getRatings().forEach(System.out::println);
         addAlternativesToMap();
         addAlternatives();
     }

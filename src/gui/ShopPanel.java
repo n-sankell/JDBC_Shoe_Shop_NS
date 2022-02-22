@@ -48,13 +48,6 @@ public class ShopPanel extends JPanel implements ActionListener {
         gc.gridheight = GridBagConstraints.NORTH;
         gc.insets = new Insets(0,10 ,823 ,10 );
         add(menuBar,gc);
-        //gc.gridwidth = GridBagConstraints.REMAINDER;
-        //gc.insets = new Insets(110,20 ,60 ,20 );
-        //gc.ipadx = 800;
-        //gc.ipady = 700;
-        //gc.gridx = 2;
-        //gc.gridy = 2;
-        //add(scrollPane,gc);
     }
 
     public void addScrollPane() {
