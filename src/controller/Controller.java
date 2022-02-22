@@ -5,7 +5,9 @@ import dbconnection.RepositoryAverage;
 import dbconnection.RepositoryFIllObjects;
 import dbconnection.RepositoryFindCustomer;
 import dbobjectmodel.BaseProduct;
+import dbobjectmodel.Comment;
 import dbobjectmodel.Customer;
+import dbobjectmodel.Rating;
 import gui.AllAveragesFrame;
 import gui.BaseFrame;
 import gui.CustomJop;
@@ -27,6 +29,7 @@ public class Controller {
     private AllAveragesListener allAveragesListener;
     private ShoeDetailsListener shoeDetailsListener;
     private AddToCartListener addToCartListener;
+    private RateCommentListener rateCommentListener;
     private GoBackListener goBackListener;
     private CheckoutListener checkoutListener;
     private ViewCartListener viewCartListener;
@@ -152,6 +155,9 @@ public class Controller {
           allAveragesFrame = new AllAveragesFrame(allAverages);
           allAveragesFrame.setVisible(true);
         };
+        rateCommentListener = (product, average, ratings, comments) -> {
+
+        };
 
     }
 
@@ -162,6 +168,7 @@ public class Controller {
         base.getShopPanel().getShoeDetails().setGoBackListener(goBackListener);
         base.getShopPanel().getShoeDetails().setAddToCartListener(addToCartListener);
         base.getShopPanel().getShoeDetails().setViewCartListener(viewCartListener);
+        base.getShopPanel().getShoeDetails().setRateCommentListener(rateCommentListener);
     }
 
     private static class PropertyReader {

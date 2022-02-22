@@ -3,6 +3,7 @@ package gui;
 import dbobjectmodel.*;
 import listeners.AddToCartListener;
 import listeners.GoBackListener;
+import listeners.RateCommentListener;
 import listeners.ViewCartListener;
 
 import javax.swing.*;
@@ -23,10 +24,12 @@ public class ShoeDetails extends JPanel implements ActionListener {
     private JPanel optionPanel;
     private JLabel inStock;
     private JLabel colors;
+    private JLabel averageScore;
     private int optionCounter = 0;
     private GoBackListener goBackListener;
     private AddToCartListener addToCartListener;
     private ViewCartListener viewCartListener;
+    private RateCommentListener rateCommentListener;
     private DisplayLabel selected;
     private CompleteShoe selectedShoe;
     private StringBuilder categoryString;
@@ -35,8 +38,8 @@ public class ShoeDetails extends JPanel implements ActionListener {
     private CustomButton viewCartButton;
     private CustomButton addToCartButton;
     private List<CompleteShoe> alternatives;
-    private List<String> ratingList;
-    private List<String> commentList;
+    private List<Rating> ratingList;
+    private List<Comment> commentList;
     private HashMap<CompleteShoe,DisplayLabel> alternativesMap;
 
     public ShoeDetails() {
@@ -158,20 +161,14 @@ public class ShoeDetails extends JPanel implements ActionListener {
     private void populateRatingList(BaseProduct product) {
         ratingList = new ArrayList<>();
         if (product.getRatings() != null) {
-            for (Rating rating : product.getRatings()) {
-                String ratingString = "Rating: " + rating.getGrade().getGrade() + " Score: " + rating.getGrade().getGradeNumber() + " Date: " + rating.getGrade().getDate() + "\nFrom: " + rating.getCustomer().getName() + ", " + rating.getCustomer().getArea().getName();
-                ratingList.add(ratingString);
-            }
+            ratingList = product.getRatings();
         }
     }
 
     private void populateCommentsList(BaseProduct product) {
         commentList = new ArrayList<>();
         if (product.getComments() != null) {
-            for (Comment comment : product.getComments()) {
-                String commentString = "Comment: " + comment.getText() + "Date: " + comment.getDate() + "\nFrom: " + comment.getCustomer().getName() + ", " + comment.getCustomer().getArea().getName();
-                commentList.add(commentString);
-            }
+            commentList = product.getComments();
         }
     }
 
@@ -247,6 +244,10 @@ public class ShoeDetails extends JPanel implements ActionListener {
 
     public void setAddToCartListener(AddToCartListener addToCartListener) {
         this.addToCartListener = addToCartListener;
+    }
+
+    public void setRateCommentListener(RateCommentListener rateCommentListener) {
+        this.rateCommentListener = rateCommentListener;
     }
 
     @Override
