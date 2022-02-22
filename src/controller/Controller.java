@@ -59,6 +59,13 @@ public class Controller {
         customers = findCustomers.getCustomers();
     }
 
+    private void combineLists() {
+        productList.forEach(shoe -> shoe.getRatings().forEach(rating -> rating.setCustomer(customers.stream()
+                        .filter(customer -> customer.getId() == rating.getCustomerId()).toList().get(0))));
+        productList.forEach(shoe -> shoe.getComments().forEach(comment -> comment.setCustomer(customers.stream()
+                        .filter(customer -> customer.getId() == comment.getCustomerId()).toList().get(0))));
+    }
+
     private void setEventHandler() {
         loginListener = (username, password) -> {
             populateCustomerList();
@@ -71,6 +78,7 @@ public class Controller {
             new CustomJop(message, buttonText);
 
             if (user != null) {
+                combineLists();
                 base.removeLogin();
                 base.setUpShopPanel();
                 setUpListeners();

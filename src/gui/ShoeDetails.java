@@ -35,6 +35,8 @@ public class ShoeDetails extends JPanel implements ActionListener {
     private CustomButton viewCartButton;
     private CustomButton addToCartButton;
     private List<CompleteShoe> alternatives;
+    private List<String> ratingList;
+    private List<String> commentList;
     private HashMap<CompleteShoe,DisplayLabel> alternativesMap;
 
     public ShoeDetails() {
@@ -147,14 +149,30 @@ public class ShoeDetails extends JPanel implements ActionListener {
         alternatives = product.getShoes();
         setCategories(product);
         categories.setText(categoryString.toString());
-        for (Rating rating : product.getRatings()) {
-            System.out.println("Rating: "+ rating.getGrade().getGrade()+" "+rating.getGrade().getGradeNumber()+" "+rating.getGrade().getDate());
-        }
-        for (Comment comment : product.getComments()) {
-            System.out.println("Comment: "+ comment.getText()+" "+comment.getDate());
-        }
+        populateRatingList(product);
+        populateCommentsList(product);
         addAlternativesToMap();
         addAlternatives();
+    }
+
+    private void populateRatingList(BaseProduct product) {
+        ratingList = new ArrayList<>();
+        if (product.getRatings() != null) {
+            for (Rating rating : product.getRatings()) {
+                String ratingString = "Rating: " + rating.getGrade().getGrade() + " Score: " + rating.getGrade().getGradeNumber() + " Date: " + rating.getGrade().getDate() + "\nFrom: " + rating.getCustomer().getName() + ", " + rating.getCustomer().getArea().getName();
+                ratingList.add(ratingString);
+            }
+        }
+    }
+
+    private void populateCommentsList(BaseProduct product) {
+        commentList = new ArrayList<>();
+        if (product.getComments() != null) {
+            for (Comment comment : product.getComments()) {
+                String commentString = "Comment: " + comment.getText() + "Date: " + comment.getDate() + "\nFrom: " + comment.getCustomer().getName() + ", " + comment.getCustomer().getArea().getName();
+                commentList.add(commentString);
+            }
+        }
     }
 
     public void addDetails() {
