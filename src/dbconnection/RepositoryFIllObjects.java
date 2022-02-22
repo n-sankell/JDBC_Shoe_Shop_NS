@@ -13,7 +13,6 @@ public class RepositoryFIllObjects {
     private final Properties properties;
     private String name;
     private String password;
-    private String connectionString;
 
     public RepositoryFIllObjects(Properties properties) {
         this.properties = properties;
@@ -23,7 +22,6 @@ public class RepositoryFIllObjects {
     private void setConnectionStrings() {
         name = properties.getProperty("name");
         password = properties.getProperty("password");
-        connectionString = properties.getProperty("connectionString");
     }
 
     private Price getPriceByShoeId(int shoeId) {
@@ -182,7 +180,7 @@ public class RepositoryFIllObjects {
     private RatingGrade getRatingGradeByRatingId(int ratingId) {
         RatingGrade grade = null;
         String query = "select * from shoe_shop_db_new.rating_grade "+
-                "inner join shoe_shop_db_new.customer_rating on customer_rating.gradeId = rating_grade.id where rating_grade.id = ?";
+                "inner join shoe_shop_db_new.customer_rating on customer_rating.gradeId = rating_grade.id where customer_rating.id = ?";
 
         try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/shoe_shop_db_new", name, password)) {
             PreparedStatement stmt = con.prepareStatement(query);
@@ -216,7 +214,7 @@ public class RepositoryFIllObjects {
                 int id = rs.getInt("id"); int gradeId = rs.getInt("gradeId"); int customerId = rs.getInt("customerId");
                 int productId = rs.getInt("productId"); Date date = rs.getDate("date");
                 Rating rating = new Rating(id,gradeId,customerId,productId,date);
-                grade = getRatingGradeByRatingId(rating.getId());
+                grade = getRatingGradeByRatingId(id);
                 rating.setGrade(grade);
                 rating.setProduct(product);
                 ratings.add(rating);

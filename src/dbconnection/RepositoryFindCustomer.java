@@ -9,17 +9,16 @@ import java.util.Properties;
 
 public class RepositoryFindCustomer {
 
-    private final Properties properties;
     private final List<Customer> allCustomers = new ArrayList<>();
+    private final String name;
+    private final String password;
 
     public RepositoryFindCustomer(Properties properties) {
-        this.properties = properties;
+        this.name = properties.getProperty("name");
+        this.password = properties.getProperty("password");
     }
 
     public void fetchCustomersToList() {
-        String name = properties.getProperty("name");
-        String password = properties.getProperty("password");
-        String connectionString = properties.getProperty("connectionString");
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/shoe_shop_db_new", name, password)) {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM shoe_shop_db_new.customer");
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -38,6 +37,8 @@ public class RepositoryFindCustomer {
         }
 
     }
+
+
 
     public List<Customer> getCustomers() {
         return allCustomers;

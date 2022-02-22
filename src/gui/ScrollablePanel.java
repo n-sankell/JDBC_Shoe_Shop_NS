@@ -33,7 +33,6 @@ public class ScrollablePanel extends JPanel implements ActionListener {
 
     public void fillMap(List<BaseProduct> products) {
         for (BaseProduct product : products) {
-            System.out.println(product.getName());
             allProducts.put(product, new DisplayLabel(product.getLabel().getName() + " " + product.getName()));
         }
         addProducts();

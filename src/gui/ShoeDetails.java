@@ -1,11 +1,7 @@
 package gui;
 
-import dbobjectmodel.BaseProduct;
-import dbobjectmodel.Category;
-import dbobjectmodel.CompleteShoe;
-import dbobjectmodel.ShoeColor;
+import dbobjectmodel.*;
 import listeners.AddToCartListener;
-import listeners.CheckoutListener;
 import listeners.GoBackListener;
 import listeners.ViewCartListener;
 
@@ -28,10 +24,8 @@ public class ShoeDetails extends JPanel implements ActionListener {
     private JLabel inStock;
     private JLabel colors;
     private int optionCounter = 0;
-    private int addedProductCounter = 0;
     private GoBackListener goBackListener;
     private AddToCartListener addToCartListener;
-    private CheckoutListener checkoutListener;
     private ViewCartListener viewCartListener;
     private DisplayLabel selected;
     private CompleteShoe selectedShoe;
@@ -39,7 +33,6 @@ public class ShoeDetails extends JPanel implements ActionListener {
     private StringBuilder colorString;
     private CustomButton backButton;
     private CustomButton viewCartButton;
-    private CustomButton checkOutButton;
     private CustomButton addToCartButton;
     private List<CompleteShoe> alternatives;
     private HashMap<CompleteShoe,DisplayLabel> alternativesMap;
@@ -76,8 +69,8 @@ public class ShoeDetails extends JPanel implements ActionListener {
         price.setFont(getFont().deriveFont(Font.BOLD,20f));
         price.setForeground(Colors.TEXT);
         size = new JLabel();
-        size.setFont(getFont().deriveFont(Font.BOLD,20f));
         size.setForeground(Colors.TEXT);
+        size.setFont(getFont().deriveFont(Font.BOLD,20f));
         inStock = new JLabel();
         inStock.setFont(getFont().deriveFont(Font.BOLD,20f));
         inStock.setForeground(Colors.TEXT);
@@ -155,8 +148,12 @@ public class ShoeDetails extends JPanel implements ActionListener {
         alternatives = product.getShoes();
         setCategories(product);
         categories.setText(categoryString.toString());
-        product.getComments().forEach(System.out::println);
-        product.getRatings().forEach(System.out::println);
+        for (Rating rating : product.getRatings()) {
+            System.out.println("Rating: "+ rating.getGrade().getGrade()+" "+rating.getGrade().getGradeNumber()+" "+rating.getGrade().getDate());
+        }
+        for (Comment comment : product.getComments()) {
+            System.out.println("Comment: "+ comment.getText()+" "+comment.getDate());
+        }
         addAlternativesToMap();
         addAlternatives();
     }
@@ -221,11 +218,6 @@ public class ShoeDetails extends JPanel implements ActionListener {
 
     public void resetCounters() {
         optionCounter = 0;
-        addedProductCounter = 0;
-    }
-
-    public void setCheckoutListener(CheckoutListener checkoutListener) {
-        this.checkoutListener = checkoutListener;
     }
 
     public void setViewCartListener(ViewCartListener viewCartListener) {
@@ -251,7 +243,6 @@ public class ShoeDetails extends JPanel implements ActionListener {
         } else if (e.getSource() == addToCartButton) {
             if (optionCounter > 0) {
                 addToCartListener.productAdded(selectedShoe);
-                addedProductCounter++;
             }
         } else if (e.getSource() == viewCartButton) {
             viewCartListener.viewCartEvent();
