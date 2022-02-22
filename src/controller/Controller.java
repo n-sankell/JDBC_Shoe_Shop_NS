@@ -143,9 +143,10 @@ public class Controller {
         };
         checkoutListener = () -> {
             new CustomJop("Thank you for your purchase!","ok");
-            viewCartFrame.dispose();
             user.clearShoes();
             base.getShopPanel().getShoeDetails().resetCounters();
+            updateAll();
+            viewCartFrame.dispose();
         };
         viewCartListener = () -> {
             if (user.getShoes().isEmpty()) {
@@ -166,6 +167,7 @@ public class Controller {
         };
         submitListener = (gradeId, text, customerId, shoeId) -> {
             new JOptionPane(rateAndCommentProduct(gradeId,text,customerId,shoeId));
+            updateAll();
             rateAndCommentFrame.dispose();
         };
 
@@ -179,6 +181,22 @@ public class Controller {
         base.getShopPanel().getShoeDetails().setAddToCartListener(addToCartListener);
         base.getShopPanel().getShoeDetails().setViewCartListener(viewCartListener);
         base.getShopPanel().getShoeDetails().setRateCommentListener(rateCommentListener);
+    }
+
+    private void updateAll() {
+        populateShoeList();
+        populateAverageList();
+        populateCustomerList();
+        base.getShopPanel().getShoeDetails().removeDetails();
+        base.getShopPanel().removeDetails();
+        base.getShopPanel().addScrollPane();
+        base.removeShopPanel();
+        combineLists();
+        base.setUpShopPanel();
+        setUpListeners();
+        base.addShopPanel();
+        base.getShopPanel().addScrollPane();
+        base.getShopPanel().getScrollablePanel().fillMap(productList);
     }
 
     private static class PropertyReader {

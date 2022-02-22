@@ -15,6 +15,7 @@ public class ViewCartFrame extends JFrame implements ActionListener {
     private JLabel total;
     private JPanel bg;
     private JPanel listBg;
+    private int counter = 0;
     private CustomButton checkout;
     private CheckoutListener checkoutListener;
     private final List<CompleteShoe> products;
@@ -86,7 +87,8 @@ public class ViewCartFrame extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == checkout) {
+        if (e.getSource() == checkout && counter == 0) {
+            counter++;
             checkoutListener.checkoutEvent();
         }
     }

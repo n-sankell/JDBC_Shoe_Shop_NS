@@ -21,6 +21,7 @@ public class RateAndCommentFrame extends JFrame implements ActionListener {
     private JPanel scrollablePanel;
     private String commentText;
     private CustomButton submit;
+    private int counter = 0;
     private JTextField commentField;
     private JScrollPane scrollPane;
     private BaseProduct product;
@@ -109,8 +110,9 @@ public class RateAndCommentFrame extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == submit) {
-            submitListener.submissionOccurred(1, commentText, userId, product.getId());
+        if (e.getSource() == submit && counter == 0) {
+            counter++;
+            submitListener.submissionOccurred(78, commentText, userId, product.getId());
         }
     }
 }
