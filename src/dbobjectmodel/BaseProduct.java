@@ -11,6 +11,8 @@ public class BaseProduct {
     private Label label;
     private final List<Category> categories = new ArrayList<>();
     private final List<CompleteShoe> shoes = new ArrayList<>();
+    private final List<Rating> ratings = new ArrayList<>();
+    private final List<Comment> comments = new ArrayList<>();
 
     public BaseProduct(int id, int labelId, String name) {
         this.id = id;
@@ -52,5 +54,21 @@ public class BaseProduct {
 
     public List<CompleteShoe> getShoes() {
         return shoes;
+    }
+
+    public List<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void addRating(Rating rating) {
+        ratings.add(rating);
+    }
+
+    public List<Comment> getComments(){
+        return comments;
+    }
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
     }
 }

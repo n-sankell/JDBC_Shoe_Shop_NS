@@ -11,7 +11,7 @@ public class LoginPanel extends JPanel implements ActionListener {
     private String enteredName;
     private String enteredPass;
     private JTextField username;
-    private JTextField password;
+    private JPasswordField password;
     private CustomButton login;
     private CustomButton register;
     private LoginListener loginListener;
@@ -32,7 +32,8 @@ public class LoginPanel extends JPanel implements ActionListener {
 
     private void setInputFields() {
         username = new JTextField("Nils Karlsson");
-        password = new JTextField("nisse");
+        password = new JPasswordField("nisse");
+        password.setEchoChar('*');
         username.setForeground(Color.GRAY);
         password.setForeground(Color.GRAY);
         username.setFont(new Font("Arial", Font.ITALIC,12));

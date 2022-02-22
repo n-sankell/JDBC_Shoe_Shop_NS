@@ -27,9 +27,9 @@ public class DisplayLabel extends JButton {
         Graphics2D g2d = (Graphics2D) g;
         super.paintComponent(g2d);
         if (getModel().isPressed()) {
-            g2d.setColor(Colors.BUTTON_PRESSED);
+            g2d.setColor(Colors.DISPLAY_LABEL_PRESSED);
         } else if (getModel().isRollover()) {
-            g2d.setColor(Colors.BUTTON_ROLL_OVER);
+            g2d.setColor(Colors.DISPLAY_LABEL_ROLL_OVER);
         } else {
             g2d.setColor(getBackground());
         }
