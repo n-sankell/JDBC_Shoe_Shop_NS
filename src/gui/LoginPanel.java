@@ -5,6 +5,7 @@ import listeners.LoginListener;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Arrays;
 
 public class LoginPanel extends JPanel implements ActionListener {
 
@@ -100,7 +101,6 @@ public class LoginPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == login) {
-            System.out.println("login");
             enteredName = username.getText();
             enteredPass = password.getText();
             validateUser();

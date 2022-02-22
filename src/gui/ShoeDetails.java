@@ -115,7 +115,6 @@ public class ShoeDetails extends JPanel implements ActionListener {
         for (CompleteShoe alternative : alternatives) {
             alternativesMap.put(alternative, new DisplayLabel("Option "+count));
             count++;
-            System.out.println(count);
         }
     }
 

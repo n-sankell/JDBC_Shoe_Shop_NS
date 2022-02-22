@@ -30,6 +30,7 @@ public class Controller {
     private List<Customer> customers;
     private List<BaseProduct> productList;
     private ViewCartFrame viewCartFrame;
+    private Customer currentCustomer;
 
     public Controller() {
         setEventHandler();
@@ -52,7 +53,7 @@ public class Controller {
         productList = repo.getBaseProducts();
     }
 
-    private void loadCustomersFromServer() {
+    private void populateCustomerList() {
         RepositoryFindCustomer findCustomers = new RepositoryFindCustomer(propertyReader.properties);
         findCustomers.fetchCustomersToList();
         customers = findCustomers.getCustomers();
@@ -60,7 +61,7 @@ public class Controller {
 
     private void setEventHandler() {
         loginListener = (username, password) -> {
-            loadCustomersFromServer();
+            populateCustomerList();
             customers.stream().filter(customer -> customer.getName().equals(username) && customer.getPassword().equals(password))
                     .forEach(customer -> user = new User(customer.getId(), customer.getName()));
 
