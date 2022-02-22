@@ -17,8 +17,12 @@ public class RateAndCommentFrame extends JFrame implements ActionListener {
     private JLabel averageScore;
     private JPanel bg;
     private JPanel ratingsBg;
+    private JPanel commentsBg;
+    private JPanel scrollablePanel;
     private String commentText;
     private CustomButton submit;
+    private JTextField commentField;
+    private JScrollPane scrollPane;
     private BaseProduct product;
     private int userId;
     private String average;
@@ -40,7 +44,7 @@ public class RateAndCommentFrame extends JFrame implements ActionListener {
     private void setUp() {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setAlwaysOnTop(true);
-        setSize(400,500);
+        setSize(900,1000);
         setLocation(500,150);
         setResizable(false);
         title = new JLabel(product.getLabel().getName()+" "+product.getName());
@@ -56,11 +60,16 @@ public class RateAndCommentFrame extends JFrame implements ActionListener {
         ratingsBg.setBackground(Colors.BG_BRIGHT);
         ratingsBg.setLayout(ratingsGrid);
         ratingsGrid.setVgap(10);
+        GridLayout commentGrid = new GridLayout(comments.size(), 1);
+        commentsBg = new JPanel();
+        commentsBg.setBackground(Colors.BG_BRIGHT);
+        commentsBg.setLayout(commentGrid);
+        scrollablePanel = new JPanel();
+        scrollablePanel.setBackground(Colors.BG_BRIGHT);
         bg = new JPanel();
         bg.setBackground(Colors.BG_BRIGHT);
         GridBagLayout gb = new GridBagLayout();
         bg.setLayout(gb);
-        bg.setPreferredSize(new Dimension(400,500));
         setTotalText();
     }
 
@@ -82,6 +91,10 @@ public class RateAndCommentFrame extends JFrame implements ActionListener {
 
     private void setTotalText() {
         averageScore.setText("Average score: " + average);
+    }
+
+    private void setCommentText(String commentText) {
+        this.commentText = commentText;
     }
 
     private void addRatings() {

@@ -189,7 +189,7 @@ public class ShoeDetails extends JPanel implements ActionListener {
         GridBagLayout gb = new GridBagLayout();
         setLayout(gb);
         GridBagConstraints gc = new GridBagConstraints();
-        gc.insets = new Insets(10,10,10,10);
+        gc.insets = new Insets(0,10,0,10);
         gc.gridy = 0;
         gc.gridx = 1;
         gc.ipady = 10;
@@ -219,6 +219,8 @@ public class ShoeDetails extends JPanel implements ActionListener {
         add(alternativePanel,gc);
         gc.gridy = 5;
         add(averageScore,gc);
+        gc.gridy = 6;
+        add(rateCommentButton,gc);
         repaint();
         revalidate();
     }
