@@ -155,9 +155,34 @@ public class RepositoryFIllObjects {
         return label;
     }
 
+
+
+    private List<Rating> getRatingByBaseProductId(int baseProductId) {
+        List<Rating> ratings = new ArrayList<>();
+        String query = "select * from shoe_shop_db_new.customer_rating "+
+                "inner join shoe_shop_db_new.base_product on customer_rating.productId = base_product.id where base_product.id = ?";
+
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/shoe_shop_db_new", name, password)) {
+            PreparedStatement stmt = con.prepareStatement(query);
+            stmt.setString(1, baseProductId+"");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                ratings.add(new Rating(rs.getInt("id"),rs.getInt("gradeId"),rs.getInt("customerId"),
+                        rs.getInt("productId"),rs.getDate("date")));
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return ratings;
+    }
+
     private BaseProduct getBaseProductById(int id) {
         BaseProduct product = null;
         Label label = getLabelByProductId(id);
+        List<Rating> ratings;
+        List<Comment> comments;
         List<Category> categories = getCategoriesByBaseProductId(id);
                 String query = "select * from shoe_shop_db_new.base_product where base_product.id = ?";
 

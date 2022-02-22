@@ -2,6 +2,7 @@ package dbobjectmodel;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class RatingGrade {
@@ -9,10 +10,10 @@ public class RatingGrade {
     private final int id;
     private final String grade;
     private final int gradeNumber;
-    private final LocalDateTime date;
+    private final Date date;
     private final List<Rating> ratings = new ArrayList<>();
 
-    public RatingGrade(int id, String grade, int gradeNumber, LocalDateTime date) {
+    public RatingGrade(int id, String grade, int gradeNumber, Date date) {
         this.id = id;
         this.grade = grade;
         this.gradeNumber = gradeNumber;
@@ -31,7 +32,7 @@ public class RatingGrade {
         return gradeNumber;
     }
 
-    public LocalDateTime getDate() {
+    public Date getDate() {
         return date;
     }
 

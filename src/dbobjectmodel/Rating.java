@@ -1,6 +1,6 @@
 package dbobjectmodel;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
 
 public class Rating {
 
@@ -8,12 +8,12 @@ public class Rating {
     private final int gradeId;
     private final int customerId;
     private final int productId;
-    private final LocalDateTime date;
+    private final Date date;
     private RatingGrade grade;
     private Customer customer;
     private BaseProduct product;
 
-    public Rating(int id, int getId, int customerId, int productId, LocalDateTime date) {
+    public Rating(int id, int getId, int customerId, int productId, Date date) {
         this.id = id;
         this.gradeId = getId;
         this.customerId = customerId;
@@ -37,7 +37,7 @@ public class Rating {
         return productId;
     }
 
-    public LocalDateTime getDate() {
+    public Date getDate() {
         return date;
     }
 

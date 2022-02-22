@@ -1,6 +1,6 @@
 package dbobjectmodel;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public class Comment {
 
@@ -8,11 +8,11 @@ public class Comment {
     private final String text;
     private final int customerId;
     private final int productId;
-    private final LocalDateTime date;
+    private final Date date;
     private BaseProduct baseProduct;
     private Customer customer;
 
-    public Comment(int id, String text, int customerId, int productId, LocalDateTime date) {
+    public Comment(int id, String text, int customerId, int productId, Date date) {
         this.id = id;
         this.text = text;
         this.customerId = customerId;
@@ -36,7 +36,7 @@ public class Comment {
         return productId;
     }
 
-    public LocalDateTime getDate() {
+    public Date getDate() {
         return date;
     }
 

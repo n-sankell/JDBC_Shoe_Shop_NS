@@ -4,7 +4,7 @@ import dbconnection.RepositoryAddToCart;
 import dbconnection.RepositoryFIllObjects;
 import dbconnection.RepositoryFindCustomer;
 import dbobjectmodel.BaseProduct;
-import dbobjectmodel.CompleteShoe;
+import dbobjectmodel.Customer;
 import gui.BaseFrame;
 import gui.CustomJop;
 import gui.ViewCartFrame;
@@ -27,8 +27,8 @@ public class Controller {
     private GoBackListener goBackListener;
     private CheckoutListener checkoutListener;
     private ViewCartListener viewCartListener;
+    private List<Customer> customers;
     private List<BaseProduct> productList;
-    private RepositoryFindCustomer findCustomers;
     private ViewCartFrame viewCartFrame;
 
     public Controller() {
@@ -52,22 +52,17 @@ public class Controller {
         productList = repo.getBaseProducts();
     }
 
-    private void addToCart(int customerId, int orderId, int shoeId) {
-        RepositoryAddToCart repositoryAddToCart = new RepositoryAddToCart(propertyReader.properties);
-        repositoryAddToCart.addToNewCart(customerId, orderId, shoeId);
-    }
-
     private void loadCustomersFromServer() {
-        findCustomers = new RepositoryFindCustomer(propertyReader.properties);
+        RepositoryFindCustomer findCustomers = new RepositoryFindCustomer(propertyReader.properties);
         findCustomers.fetchCustomersToList();
+        customers = findCustomers.getCustomers();
     }
 
     private void setEventHandler() {
         loginListener = (username, password) -> {
             loadCustomersFromServer();
-            findCustomers.getCustomers().stream()
-                    .filter(customer -> customer.getName().equals(username) && customer.getPassword().equals(password))
-                    .toList().forEach(customer -> user = new User(customer.getId(), customer.getName()));
+            customers.stream().filter(customer -> customer.getName().equals(username) && customer.getPassword().equals(password))
+                    .forEach(customer -> user = new User(customer.getId(), customer.getName()));
 
             String message = user == null ? "Username and password do not match! " : "Welcome "+user.getName()+"!";
             String buttonText = user == null ? "Try again" : "Let's shop!";
@@ -104,7 +99,7 @@ public class Controller {
             base.getShopPanel().addScrollPane();
         };
         addToCartListener = (shoe) -> {
-            String message = "";
+            String message;
             RepositoryAddToCart repositoryAddToCart = new RepositoryAddToCart(propertyReader.properties);
             if (user.getShoes().isEmpty()) {
                 message = repositoryAddToCart.addToNewCart(user.getId(),0,shoe.getId());

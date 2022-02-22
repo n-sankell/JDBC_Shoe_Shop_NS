@@ -1,15 +1,15 @@
 package dbobjectmodel;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public class OutOfStock {
 
     private final int id;
     private final int shoeId;
-    private final LocalDateTime date;
+    private final Date date;
     private CompleteShoe shoe;
 
-    public OutOfStock(int id, int shoeId, LocalDateTime date) {
+    public OutOfStock(int id, int shoeId, Date date) {
         this.id = id;
         this.shoeId = shoeId;
         this.date = date;
@@ -31,7 +31,7 @@ public class OutOfStock {
         return shoeId;
     }
 
-    public LocalDateTime getDate() {
+    public Date getDate() {
         return date;
     }
 

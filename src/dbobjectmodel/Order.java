@@ -1,17 +1,17 @@
 package dbobjectmodel;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Order {
 
     private final int id;
     private final int customerId;
-    private final LocalDateTime date;
+    private final Date date;
     private final List<CompleteShoe> shoes = new ArrayList<>();
 
-    public Order(int id, int customerId, LocalDateTime date) {
+    public Order(int id, int customerId, Date date) {
         this.id = id;
         this.customerId = customerId;
         this.date = date;
@@ -25,7 +25,7 @@ public class Order {
         return customerId;
     }
 
-    public LocalDateTime getDate() {
+    public Date getDate() {
         return date;
     }
 
