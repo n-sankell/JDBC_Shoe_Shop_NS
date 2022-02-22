@@ -37,9 +37,11 @@ public class ShoeDetails extends JPanel implements ActionListener {
     private CustomButton backButton;
     private CustomButton viewCartButton;
     private CustomButton addToCartButton;
+    private CustomButton rateCommentButton;
     private List<CompleteShoe> alternatives;
     private List<Rating> ratingList;
     private List<Comment> commentList;
+    private BaseProduct baseProduct;
     private HashMap<CompleteShoe,DisplayLabel> alternativesMap;
 
     public ShoeDetails() {
@@ -55,6 +57,8 @@ public class ShoeDetails extends JPanel implements ActionListener {
         addToCartButton.addActionListener(this);
         viewCartButton = new CustomButton("View cart");
         viewCartButton.addActionListener(this);
+        rateCommentButton = new CustomButton("Feedback");
+        rateCommentButton.addActionListener(this);
         GridLayout optionGrid = new GridLayout(1,3);
         optionGrid.setHgap(10);
         optionPanel = new JPanel();
@@ -72,16 +76,19 @@ public class ShoeDetails extends JPanel implements ActionListener {
         categories.setForeground(Colors.TEXT);
         price = new JLabel();
         price.setFont(getFont().deriveFont(Font.BOLD,20f));
-        price.setForeground(Colors.TEXT);
+        price.setForeground(Color.BLACK);
         size = new JLabel();
-        size.setForeground(Colors.TEXT);
+        size.setForeground(Color.BLACK);
         size.setFont(getFont().deriveFont(Font.BOLD,20f));
         inStock = new JLabel();
         inStock.setFont(getFont().deriveFont(Font.BOLD,20f));
-        inStock.setForeground(Colors.TEXT);
+        inStock.setForeground(Color.BLACK);
         colors = new JLabel();
         colors.setFont(getFont().deriveFont(Font.BOLD,20f));
-        colors.setForeground(Colors.TEXT);
+        colors.setForeground(Color.BLACK);
+        averageScore = new JLabel();
+        averageScore.setFont(getFont().deriveFont(Font.BOLD,20f));
+        averageScore.setForeground(Colors.TEXT);
         alternativePanel = new JPanel();
         alternativePanel.setBackground(Colors.BG_BRIGHT);
         alternativePanel.setPreferredSize(new Dimension(800,50));
@@ -110,6 +117,7 @@ public class ShoeDetails extends JPanel implements ActionListener {
         inStock.setText("");
         detailPanel.remove(inStock);
         remove(detailPanel);
+        remove(averageScore);
         repaint();
         revalidate();
     }
@@ -147,13 +155,14 @@ public class ShoeDetails extends JPanel implements ActionListener {
     }
 
     public void setProduct(BaseProduct product) {
+        this.baseProduct = product;
         alternatives = new ArrayList<>();
-        title.setText(product.getLabel().getName()+" "+product.getName());
-        alternatives = product.getShoes();
+        title.setText(baseProduct.getLabel().getName()+" "+baseProduct.getName());
+        alternatives = baseProduct.getShoes();
         setCategories(product);
         categories.setText(categoryString.toString());
-        populateRatingList(product);
-        populateCommentsList(product);
+        populateRatingList(baseProduct);
+        populateCommentsList(baseProduct);
         addAlternativesToMap();
         addAlternatives();
     }
@@ -170,6 +179,10 @@ public class ShoeDetails extends JPanel implements ActionListener {
         if (product.getComments() != null) {
             commentList = product.getComments();
         }
+    }
+
+    public void setAverageScore(String average) {
+        averageScore.setText(average);
     }
 
     public void addDetails() {
@@ -194,16 +207,18 @@ public class ShoeDetails extends JPanel implements ActionListener {
         add(categories,gc);
         gc.gridx = 1;
         gc.gridy = 3;
-        add(detailPanel,gc);
-        gc.gridx = 1;
-        gc.gridy = 4;
         detailPanel.add(price);
         detailPanel.add(size);
         detailPanel.add(colors);
         detailPanel.add(new JLabel(" "));
         detailPanel.add(inStock);
         detailPanel.add(new JLabel(" "));
+        add(detailPanel,gc);
+        gc.gridx = 1;
+        gc.gridy = 4;
         add(alternativePanel,gc);
+        gc.gridy = 5;
+        add(averageScore,gc);
         repaint();
         revalidate();
     }
@@ -264,6 +279,8 @@ public class ShoeDetails extends JPanel implements ActionListener {
             }
         } else if (e.getSource() == viewCartButton) {
             viewCartListener.viewCartEvent();
+        } else if (e.getSource() == rateCommentButton) {
+            rateCommentListener.rateAndComment(baseProduct, averageScore.getText(), ratingList, commentList);
         } else {
             selected = (DisplayLabel) e.getSource();
             optionCounter++;

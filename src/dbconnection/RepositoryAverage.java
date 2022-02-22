@@ -32,10 +32,10 @@ public class RepositoryAverage {
         return averageForAll;
     }
 
-    private String getAverageFromProductId(int customerId) {
+    public String getAverageFromProductId(int customerId) {
         String result = "";
-        String query = "SELECT shoe_shop_db_new.medelbetyg.Medelbetyg, shoe_shop_db_new.medelbetyg.Rating " +
-                "from shoe_shop_db_new.medelbetyg where shoe_shop_db_new.base_product.id = ?";
+        String query = "SELECT shoe_shop_db_new.medelbetyg.Medelbetyg, shoe_shop_db_new.medelbetyg.Rating from shoe_shop_db_new.medelbetyg " +
+                "inner join shoe_shop_db_new.base_product on base_product.productName = Medelbetyg.Produkt where shoe_shop_db_new.base_product.id = ?";
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/shoe_shop_db_new", name, password);
             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
@@ -43,7 +43,7 @@ public class RepositoryAverage {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                result = ""+resultSet.getDouble("Medelbetyg")+" "+resultSet.getString("rating");
+                result = "Average score: "+resultSet.getDouble("Medelbetyg")+" "+resultSet.getString("rating");
             }
 
         } catch (SQLException e) {

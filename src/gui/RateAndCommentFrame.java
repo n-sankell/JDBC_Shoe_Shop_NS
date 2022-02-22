@@ -3,6 +3,7 @@ package gui;
 import dbobjectmodel.BaseProduct;
 import dbobjectmodel.Comment;
 import dbobjectmodel.Rating;
+import listeners.RateAndCommentSubmitListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,17 +17,21 @@ public class RateAndCommentFrame extends JFrame implements ActionListener {
     private JLabel averageScore;
     private JPanel bg;
     private JPanel ratingsBg;
-    private CustomButton rate;
+    private String commentText;
+    private CustomButton submit;
     private BaseProduct product;
+    private int userId;
     private String average;
     private List<Rating> ratings;
     private List<Comment> comments;
+    private RateAndCommentSubmitListener submitListener;
 
-    public RateAndCommentFrame(BaseProduct product, String average, List<Rating> ratings, List<Comment> comments) {
+    public RateAndCommentFrame(BaseProduct product, String average, List<Rating> ratings, List<Comment> comments, int userId) {
         this.product = product;
         this.average = average;
         this.ratings = ratings;
         this.comments = comments;
+        this.userId = userId;
         setVisible(true);
         setUp();
         addElements();
@@ -44,8 +49,8 @@ public class RateAndCommentFrame extends JFrame implements ActionListener {
         averageScore = new JLabel();
         averageScore.setForeground(Colors.TEXT);
         averageScore.setFont(getFont().deriveFont(Font.BOLD,26f));
-        rate = new CustomButton("Rate");
-        rate.addActionListener(this);
+        submit = new CustomButton("Submit");
+        submit.addActionListener(this);
         GridLayout ratingsGrid = new GridLayout(ratings.size(), 1);
         ratingsBg = new JPanel();
         ratingsBg.setBackground(Colors.BG_BRIGHT);
@@ -71,7 +76,7 @@ public class RateAndCommentFrame extends JFrame implements ActionListener {
         gc.gridy = 3;
         bg.add(averageScore,gc);
         gc.gridy = 4;
-        bg.add(rate,gc);
+        bg.add(submit,gc);
         add(bg);
     }
 
@@ -85,8 +90,14 @@ public class RateAndCommentFrame extends JFrame implements ActionListener {
         }
     }
 
+    public void setSubmitListener(RateAndCommentSubmitListener submitListener) {
+        this.submitListener = submitListener;
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        if (e.getSource() == submit) {
+            submitListener.submissionOccurred(1, commentText, userId, product.getId());
+        }
     }
 }

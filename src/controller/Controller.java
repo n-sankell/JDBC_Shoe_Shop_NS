@@ -1,19 +1,12 @@
 package controller;
 
-import dbconnection.RepositoryAddToCart;
-import dbconnection.RepositoryAverage;
-import dbconnection.RepositoryFIllObjects;
-import dbconnection.RepositoryFindCustomer;
+import dbconnection.*;
 import dbobjectmodel.BaseProduct;
-import dbobjectmodel.Comment;
 import dbobjectmodel.Customer;
-import dbobjectmodel.Rating;
-import gui.AllAveragesFrame;
-import gui.BaseFrame;
-import gui.CustomJop;
-import gui.ViewCartFrame;
+import gui.*;
 import listeners.*;
 
+import javax.swing.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
@@ -30,15 +23,17 @@ public class Controller {
     private ShoeDetailsListener shoeDetailsListener;
     private AddToCartListener addToCartListener;
     private RateCommentListener rateCommentListener;
+    private RateAndCommentSubmitListener submitListener;
     private GoBackListener goBackListener;
     private CheckoutListener checkoutListener;
     private ViewCartListener viewCartListener;
+    private RepositoryAverage averageRepo;
     private List<Customer> customers;
     private List<BaseProduct> productList;
     private List<String> allAverages;
     private ViewCartFrame viewCartFrame;
     private AllAveragesFrame allAveragesFrame;
-    private Customer currentCustomer;
+    private RateAndCommentFrame rateAndCommentFrame;
 
     public Controller() {
         setEventHandler();
@@ -58,8 +53,17 @@ public class Controller {
     }
 
     private void populateAverageList() {
-        RepositoryAverage averageRepo = new RepositoryAverage(propertyReader.properties);
+        averageRepo = new RepositoryAverage(propertyReader.properties);
         allAverages = averageRepo.getAverageScoreTable();
+    }
+
+    private String getAverageByProductId(int id) {
+        return averageRepo.getAverageFromProductId(id);
+    }
+
+    private String rateAndCommentProduct(int gradeId, String text, int customerId, int shoeId) {
+        RepositoryRateComment rateComment = new RepositoryRateComment(propertyReader.properties);
+        return rateComment.RateAndComment(gradeId,text,customerId,shoeId);
     }
 
     private void populateShoeList() {
@@ -84,7 +88,7 @@ public class Controller {
         loginListener = (username, password) -> {
             populateCustomerList();
             customers.stream().filter(customer -> customer.getName().equals(username) && customer.getPassword().equals(password))
-                    .forEach(customer -> user = new User(customer.getId(), customer.getName()));
+                    .forEach(customer -> user = new User(customer.getId(), customer.getName(), customer));
 
             String message = user == null ? "Username and password do not match! " : "Welcome "+user.getName()+"!";
             String buttonText = user == null ? "Try again" : "Let's shop!";
@@ -110,6 +114,7 @@ public class Controller {
             base.startLogin();
         };
         shoeDetailsListener = product -> {
+            base.getShopPanel().getShoeDetails().setAverageScore(getAverageByProductId(product.getId()));
             base.getShopPanel().getShoeDetails().setProduct(product);
             base.getShopPanel().getShoeDetails().addDetails();
             base.getShopPanel().removeScrollPane();
@@ -147,8 +152,8 @@ public class Controller {
                 new CustomJop("Your cart is empty!","ok");
             } else {
                 viewCartFrame = new ViewCartFrame(user.getShoes());
-                viewCartFrame.setVisible(true);
                 viewCartFrame.setCheckoutListener(checkoutListener);
+                viewCartFrame.setVisible(true);
             }
         };
         allAveragesListener = () -> {
@@ -156,7 +161,12 @@ public class Controller {
           allAveragesFrame.setVisible(true);
         };
         rateCommentListener = (product, average, ratings, comments) -> {
-
+            rateAndCommentFrame = new RateAndCommentFrame(product, average, ratings, comments, user.getId());
+            rateAndCommentFrame.setSubmitListener(submitListener);
+        };
+        submitListener = (gradeId, text, customerId, shoeId) -> {
+            new JOptionPane(rateAndCommentProduct(gradeId,text,customerId,shoeId));
+            rateAndCommentFrame.dispose();
         };
 
     }
