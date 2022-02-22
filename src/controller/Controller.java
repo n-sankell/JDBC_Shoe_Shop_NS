@@ -1,6 +1,7 @@
 package controller;
 
 import dbconnection.RepositoryAddToCart;
+import dbconnection.RepositoryAverage;
 import dbconnection.RepositoryFIllObjects;
 import dbconnection.RepositoryFindCustomer;
 import dbobjectmodel.BaseProduct;
@@ -29,6 +30,7 @@ public class Controller {
     private ViewCartListener viewCartListener;
     private List<Customer> customers;
     private List<BaseProduct> productList;
+    private List<String> allAverages;
     private ViewCartFrame viewCartFrame;
     private Customer currentCustomer;
 
@@ -46,6 +48,13 @@ public class Controller {
         propertyReader = new PropertyReader();
         propertyReader.readProperties();
         populateShoeList();
+        populateAverageList();
+    }
+
+    private void populateAverageList() {
+        RepositoryAverage averageRepo = new RepositoryAverage(propertyReader.properties);
+        allAverages = averageRepo.getAverageScoreTable();
+        allAverages.forEach(System.out::println);
     }
 
     private void populateShoeList() {
