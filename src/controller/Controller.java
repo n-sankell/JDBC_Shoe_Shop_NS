@@ -86,7 +86,10 @@ public class Controller {
         productList.forEach(product -> product.getComments().forEach(comment -> comment.getCustomer().addComment(comment)));
         productList.forEach(product -> product.getRatings().forEach(rating -> rating.getCustomer().addRating(rating)));
         productList.forEach(product -> product.getLabel().addProduct(product));
+        productList.forEach(product -> product.getShoes().forEach(shoe -> shoe.getOrders().forEach(order -> order.addShoe(shoe))));
 
+        productList.forEach(product -> product.getShoes().forEach(shoe -> shoe.getOrders().forEach(order -> order.setCustomer(customers.stream()
+                .filter(customer -> customer.getId() == order.getCustomerId()).toList().get(0)))));
 
     }
 

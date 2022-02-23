@@ -102,8 +102,30 @@ public class RepositoryFIllObjects {
             System.out.println(e.getMessage());
         }
 
-
         return outOfStockList;
+    }
+
+    private List<Order> getOrdersFromShoeId(int shoeId) {
+        List<Order> orders = new ArrayList<>();
+        Order order;
+        String query = "select * from shoe_shop_db_new.shoe_order "+
+                "inner join shoe_shop_db_new.map_shoe_order_shoe on shoe_order.id = map_shoe_order_shoe.shoeOrderId " +
+                "inner join shoe_shop_db_new.shoe on map_shoe_order_shoe.shoeId = shoe.id where shoe.id = ?";
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/shoe_shop_db_new", name, password)) {
+            PreparedStatement stmt = con.prepareStatement(query);
+            stmt.setString(1, shoeId+"");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                order = new Order(rs.getInt("id"),rs.getInt("customerId"),rs.getDate("date"));
+                orders.add(order);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return orders;
     }
 
     private List<CompleteShoe> getCompleteShoByProdId(int id, BaseProduct product) {
@@ -127,6 +149,8 @@ public class RepositoryFIllObjects {
                 colors.forEach(shoe::addColor);
                 List<OutOfStock> outOfStockList = getOutOfStockByShoeId(shoe.getId());
                 outOfStockList.forEach(shoe::addOutOfStock);
+                List<Order> orders = getOrdersFromShoeId(shoe.getId());
+                orders.forEach(shoe::addOrder);
                 shoe.setProduct(product);
                 shoes.add(shoe);
             }
