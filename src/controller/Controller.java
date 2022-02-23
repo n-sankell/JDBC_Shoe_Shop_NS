@@ -82,6 +82,8 @@ public class Controller {
                         .filter(customer -> customer.getId() == rating.getCustomerId()).toList().get(0))));
         productList.forEach(shoe -> shoe.getComments().forEach(comment -> comment.setCustomer(customers.stream()
                         .filter(customer -> customer.getId() == comment.getCustomerId()).toList().get(0))));
+        //customers.forEach(customer -> customer.forEach(comment -> comment.setCustomer(customers.stream()
+        //        .filter(customer -> customer.getId() == comment.getCustomerId()).toList().get(0))));
     }
 
     private void setEventHandler() {
