@@ -4,14 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Customer {
+
     private final int id;
     private final int areaId;
     private final String name;
     private final String password;
+    private Area area;
     private final List<Rating> ratings = new ArrayList<>();
     private final List<Comment> comments = new ArrayList<>();
     private final List<Order> orders = new ArrayList<>();
-    private Area area;
 
     public Customer(int id, int areaId, String name, String password) {
         this.id = id;

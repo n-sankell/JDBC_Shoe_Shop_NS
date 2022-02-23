@@ -82,8 +82,19 @@ public class Controller {
                         .filter(customer -> customer.getId() == rating.getCustomerId()).toList().get(0))));
         productList.forEach(shoe -> shoe.getComments().forEach(comment -> comment.setCustomer(customers.stream()
                         .filter(customer -> customer.getId() == comment.getCustomerId()).toList().get(0))));
-        //customers.forEach(customer -> customer.forEach(comment -> comment.setCustomer(customers.stream()
-        //        .filter(customer -> customer.getId() == comment.getCustomerId()).toList().get(0))));
+
+        productList.forEach(product -> product.getCategories().forEach(category -> category.addBaseProduct(product)));
+
+        productList.forEach(product -> product.getComments().forEach(comment -> comment.getCustomer().addComment(comment)));
+
+        productList.forEach(product -> product.getRatings().forEach(rating -> rating.getCustomer().addRating(rating)));
+        printOutProductsFromSpecificCategory("Vinterskor");
+    }
+
+    public void printOutProductsFromSpecificCategory(String filterCategory) {
+        productList.forEach(product -> product.getCategories().stream().filter(category -> category
+                .getName().equals(filterCategory)).forEach(category -> category.getBaseProducts()
+                .forEach(prod -> System.out.println(category.getName()+" "+prod.getName()))));
     }
 
     private void setEventHandler() {
