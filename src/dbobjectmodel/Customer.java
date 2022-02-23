@@ -10,7 +10,7 @@ public class Customer {
     private final String password;
     private final List<Rating> ratings = new ArrayList<>();
     private final List<Comment> comments = new ArrayList<>();
-    private final List<Order> orders = new ArrayList<>();/
+    private final List<Order> orders = new ArrayList<>();
     private Area area;
 
     public Customer(int id, int areaId, String name, String password) {
