@@ -13,6 +13,9 @@ public class CompleteShoe {
     private BaseProduct product;
     private Size size;
     private Price price;
+
+    private final List<OutOfStock> outOfStockList = new ArrayList<>();
+    private final List<Order> orders = new ArrayList<>();
     private final List<ShoeColor> colors = new ArrayList<>();
 
     public CompleteShoe(int id, int baseProductId, int sizeId, int priceId, int amountInStock) {
@@ -78,4 +81,21 @@ public class CompleteShoe {
     public void addColor(ShoeColor color) {
         colors.add(color);
     }
+
+    public List<OutOfStock> getOutOfStockList() {
+        return outOfStockList;
+    }
+
+    public void addOutOfStock(OutOfStock outOfStock) {
+        outOfStockList.add(outOfStock);
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void addOrder(Order order) {
+        orders.add(order);
+    }
+
 }

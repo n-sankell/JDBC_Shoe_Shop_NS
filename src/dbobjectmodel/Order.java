@@ -9,6 +9,7 @@ public class Order {
     private final int id;
     private final int customerId;
     private final Date date;
+    private Customer customer;
     private final List<CompleteShoe> shoes = new ArrayList<>();
 
     public Order(int id, int customerId, Date date) {
@@ -27,6 +28,14 @@ public class Order {
 
     public Date getDate() {
         return date;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Customer getCustomer() {
+        return customer;
     }
 
     public List<CompleteShoe> getShoes() {

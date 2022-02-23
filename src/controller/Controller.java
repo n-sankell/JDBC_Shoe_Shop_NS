@@ -6,7 +6,6 @@ import dbobjectmodel.Customer;
 import gui.*;
 import listeners.*;
 
-import javax.swing.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
@@ -77,18 +76,18 @@ public class Controller {
         customers = findCustomers.getCustomers();
     }
 
-    private void combineLists() {
+    private void linkInstances() {
         productList.forEach(shoe -> shoe.getRatings().forEach(rating -> rating.setCustomer(customers.stream()
                         .filter(customer -> customer.getId() == rating.getCustomerId()).toList().get(0))));
         productList.forEach(shoe -> shoe.getComments().forEach(comment -> comment.setCustomer(customers.stream()
                         .filter(customer -> customer.getId() == comment.getCustomerId()).toList().get(0))));
 
         productList.forEach(product -> product.getCategories().forEach(category -> category.addBaseProduct(product)));
-
         productList.forEach(product -> product.getComments().forEach(comment -> comment.getCustomer().addComment(comment)));
-
         productList.forEach(product -> product.getRatings().forEach(rating -> rating.getCustomer().addRating(rating)));
-        printOutProductsFromSpecificCategory("Vinterskor");
+        productList.forEach(product -> product.getLabel().addProduct(product));
+
+
     }
 
     public void printOutProductsFromSpecificCategory(String filterCategory) {
@@ -109,7 +108,7 @@ public class Controller {
             new CustomJop(message, buttonText);
 
             if (user != null) {
-                combineLists();
+                linkInstances();
                 base.removeLogin();
                 base.setUpShopPanel();
                 setUpListeners();
@@ -204,7 +203,7 @@ public class Controller {
         base.getShopPanel().removeDetails();
         base.getShopPanel().addScrollPane();
         base.removeShopPanel();
-        combineLists();
+        linkInstances();
         base.setUpShopPanel();
         setUpListeners();
         base.addShopPanel();
