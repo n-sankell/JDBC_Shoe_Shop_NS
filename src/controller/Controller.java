@@ -166,7 +166,7 @@ public class Controller {
             rateAndCommentFrame.setSubmitListener(submitListener);
         };
         submitListener = (gradeId, text, customerId, shoeId) -> {
-            new JOptionPane(rateAndCommentProduct(gradeId,text,customerId,shoeId));
+            new CustomJop(rateAndCommentProduct(gradeId,text,customerId,shoeId),"No problem!");
             updateAll();
             rateAndCommentFrame.dispose();
         };
