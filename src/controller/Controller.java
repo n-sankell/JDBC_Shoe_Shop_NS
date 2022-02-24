@@ -77,50 +77,6 @@ public class Controller {
         customers.forEach(customer -> System.out.println(customer.getName()+" "+customer.getPassword()));
     }
 
-    private void linkInstances() {
-        productList.forEach(shoe -> shoe.getRatings().forEach(rating -> rating.setCustomer(customers.stream()
-                        .filter(customer -> customer.getId() == rating.getCustomerId()).toList().get(0))));
-        productList.forEach(shoe -> shoe.getComments().forEach(comment -> comment.setCustomer(customers.stream()
-                        .filter(customer -> customer.getId() == comment.getCustomerId()).toList().get(0))));
-
-        productList.forEach(product -> product.getCategories().forEach(category -> category.addBaseProduct(product)));
-        productList.forEach(product -> product.getComments().forEach(comment -> comment.getCustomer().addComment(comment)));
-        productList.forEach(product -> product.getRatings().forEach(rating -> rating.getCustomer().addRating(rating)));
-        productList.forEach(product -> product.getLabel().addProduct(product));
-        productList.forEach(product -> product.getShoes().forEach(shoe -> shoe.getOrders().forEach(order -> order.addShoe(shoe))));
-
-        productList.forEach(product -> product.getShoes().forEach(shoe -> shoe.getOrders().forEach(order -> order.setCustomer(customers.stream()
-                .filter(customer -> customer.getId() == order.getCustomerId()).toList().get(0)))));
-
-        productList.forEach(product -> product.getShoes().forEach(shoe -> shoe.getOrders().forEach(order -> order.getCustomer().addOrder(order))));
-
-    }
-
-    private List<String> getCustomerHistoryList(Customer customerIn) {
-        List<String> customerHistory = new ArrayList<>();
-        customerHistory.add("Customer History!");
-
-        customerHistory.add(customerIn.getName()+" Orders: ");
-        for (Order order : customerIn.getOrders()) {
-            customerHistory.add(order.getDate().toString());
-            order.getShoes().forEach(shoe -> customerHistory.add(shoe.getProduct().getLabel().getName()+" "+
-                    shoe.getProduct().getName()+" Size: "+shoe.getSize().getSize()+" Price: "+shoe.getPrice().getPrice()));
-        }
-        customerHistory.add("------------------");
-        customerHistory.add(customerIn.getName()+" Ratings: ");
-        for (Rating rating : customerIn.getRatings()) {
-            customerHistory.add(rating.getDate().toString());
-            customerHistory.add(rating.getProduct().getLabel().getName()+" "+rating.getProduct().getName()+"\n "+rating.getGrade().getGrade());
-        }
-        customerHistory.add("------------------");
-        customerHistory.add(customerIn.getName()+" Comments: ");
-        for (Comment comment : customerIn.getComments()) {
-            customerHistory.add(comment.getDate().toString());
-            customerHistory.add(comment.getBaseProduct().getLabel().getName()+" "+comment.getBaseProduct().getName()+"\n "+comment.getText());
-        }
-        return customerHistory;
-    }
-
     private void setEventHandler() {
         loginListener = (username, password) -> {
             populateCustomerList();
@@ -219,6 +175,25 @@ public class Controller {
 
     }
 
+    private void linkInstances() {
+        productList.forEach(shoe -> shoe.getRatings().forEach(rating -> rating.setCustomer(customers.stream()
+                .filter(customer -> customer.getId() == rating.getCustomerId()).toList().get(0))));
+        productList.forEach(shoe -> shoe.getComments().forEach(comment -> comment.setCustomer(customers.stream()
+                .filter(customer -> customer.getId() == comment.getCustomerId()).toList().get(0))));
+
+        productList.forEach(product -> product.getCategories().forEach(category -> category.addBaseProduct(product)));
+        productList.forEach(product -> product.getComments().forEach(comment -> comment.getCustomer().addComment(comment)));
+        productList.forEach(product -> product.getRatings().forEach(rating -> rating.getCustomer().addRating(rating)));
+        productList.forEach(product -> product.getLabel().addProduct(product));
+        productList.forEach(product -> product.getShoes().forEach(shoe -> shoe.getOrders().forEach(order -> order.addShoe(shoe))));
+
+        productList.forEach(product -> product.getShoes().forEach(shoe -> shoe.getOrders().forEach(order -> order.setCustomer(customers.stream()
+                .filter(customer -> customer.getId() == order.getCustomerId()).toList().get(0)))));
+
+        productList.forEach(product -> product.getShoes().forEach(shoe -> shoe.getOrders().forEach(order -> order.getCustomer().addOrder(order))));
+
+    }
+
     private void setUpListeners() {
         base.getShopPanel().setAllAveragesListener(viewMenuListener);
         base.getShopPanel().setLogOutListener(logOutListener);
@@ -243,6 +218,31 @@ public class Controller {
         base.addShopPanel();
         base.getShopPanel().addScrollPane();
         base.getShopPanel().getScrollablePanel().fillMap(productList);
+    }
+
+    private List<String> getCustomerHistoryList(Customer customerIn) {
+        List<String> customerHistory = new ArrayList<>();
+        customerHistory.add("Customer History!");
+
+        customerHistory.add(customerIn.getName()+" Orders: ");
+        for (Order order : customerIn.getOrders()) {
+            customerHistory.add(order.getDate().toString());
+            order.getShoes().forEach(shoe -> customerHistory.add(shoe.getProduct().getLabel().getName()+" "+
+                    shoe.getProduct().getName()+" Size: "+shoe.getSize().getSize()+" Price: "+shoe.getPrice().getPrice()));
+        }
+        customerHistory.add("------------------");
+        customerHistory.add(customerIn.getName()+" Ratings: ");
+        for (Rating rating : customerIn.getRatings()) {
+            customerHistory.add(rating.getDate().toString());
+            customerHistory.add(rating.getProduct().getLabel().getName()+" "+rating.getProduct().getName()+"\n "+rating.getGrade().getGrade());
+        }
+        customerHistory.add("------------------");
+        customerHistory.add(customerIn.getName()+" Comments: ");
+        for (Comment comment : customerIn.getComments()) {
+            customerHistory.add(comment.getDate().toString());
+            customerHistory.add(comment.getBaseProduct().getLabel().getName()+" "+comment.getBaseProduct().getName()+"\n "+comment.getText());
+        }
+        return customerHistory;
     }
 
     private static class PropertyReader {

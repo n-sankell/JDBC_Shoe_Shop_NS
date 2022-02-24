@@ -237,7 +237,7 @@ public class RepositoryFIllObjects {
 
             while (rs.next()) {
                 grade = new RatingGrade(rs.getInt("id"),rs.getString("grade"),
-                        rs.getInt("gradeNumber"), rs.getDate("date"));
+                        rs.getInt("gradeNumber"));
             }
 
         } catch (SQLException e) {
