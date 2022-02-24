@@ -17,6 +17,7 @@ public class RepositoryAverage {
 
     public List<String> getAverageScoreTable() {
         List<String> averageForAll = new ArrayList<>();
+        averageForAll.add("All Average Scores!");
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/shoe_shop_db_new", name, password)) {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM shoe_shop_db_new.medelbetyg");
             ResultSet resultSet = preparedStatement.executeQuery();

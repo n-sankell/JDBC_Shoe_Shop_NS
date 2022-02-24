@@ -1,13 +1,13 @@
 package controller;
 
 import dbconnection.*;
-import dbobjectmodel.BaseProduct;
-import dbobjectmodel.Customer;
+import dbobjectmodel.*;
 import gui.*;
 import listeners.*;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -18,7 +18,7 @@ public class Controller {
     private PropertyReader propertyReader;
     private LoginListener loginListener;
     private LogOutListener logOutListener;
-    private AllAveragesListener allAveragesListener;
+    private ViewMenuListener viewMenuListener;
     private ShoeDetailsListener shoeDetailsListener;
     private AddToCartListener addToCartListener;
     private RateCommentListener rateCommentListener;
@@ -31,7 +31,7 @@ public class Controller {
     private List<BaseProduct> productList;
     private List<String> allAverages;
     private ViewCartFrame viewCartFrame;
-    private AllAveragesFrame allAveragesFrame;
+    private InfoFrame infoFrame;
     private RateAndCommentFrame rateAndCommentFrame;
 
     public Controller() {
@@ -74,6 +74,7 @@ public class Controller {
         RepositoryFindCustomer findCustomers = new RepositoryFindCustomer(propertyReader.properties);
         findCustomers.fetchCustomersToList();
         customers = findCustomers.getCustomers();
+        customers.forEach(customer -> System.out.println(customer.getName()+" "+customer.getPassword()));
     }
 
     private void linkInstances() {
@@ -91,12 +92,33 @@ public class Controller {
         productList.forEach(product -> product.getShoes().forEach(shoe -> shoe.getOrders().forEach(order -> order.setCustomer(customers.stream()
                 .filter(customer -> customer.getId() == order.getCustomerId()).toList().get(0)))));
 
+        productList.forEach(product -> product.getShoes().forEach(shoe -> shoe.getOrders().forEach(order -> order.getCustomer().addOrder(order))));
+
     }
 
-    public void printOutProductsFromSpecificCategory(String filterCategory) {
-        productList.forEach(product -> product.getCategories().stream().filter(category -> category
-                .getName().equals(filterCategory)).forEach(category -> category.getBaseProducts()
-                .forEach(prod -> System.out.println(category.getName()+" "+prod.getName()))));
+    private List<String> getCustomerHistoryList(Customer customerIn) {
+        List<String> customerHistory = new ArrayList<>();
+        customerHistory.add("Customer History!");
+
+        customerHistory.add(customerIn.getName()+" Orders: ");
+        for (Order order : customerIn.getOrders()) {
+            customerHistory.add(order.getDate().toString());
+            order.getShoes().forEach(shoe -> customerHistory.add(shoe.getProduct().getLabel().getName()+" "+
+                    shoe.getProduct().getName()+" Size: "+shoe.getSize().getSize()+" Price: "+shoe.getPrice().getPrice()));
+        }
+        customerHistory.add("------------------");
+        customerHistory.add(customerIn.getName()+" Ratings: ");
+        for (Rating rating : customerIn.getRatings()) {
+            customerHistory.add(rating.getDate().toString());
+            customerHistory.add(rating.getProduct().getLabel().getName()+" "+rating.getProduct().getName()+"\n "+rating.getGrade().getGrade());
+        }
+        customerHistory.add("------------------");
+        customerHistory.add(customerIn.getName()+" Comments: ");
+        for (Comment comment : customerIn.getComments()) {
+            customerHistory.add(comment.getDate().toString());
+            customerHistory.add(comment.getBaseProduct().getLabel().getName()+" "+comment.getBaseProduct().getName()+"\n "+comment.getText());
+        }
+        return customerHistory;
     }
 
     private void setEventHandler() {
@@ -122,6 +144,8 @@ public class Controller {
         };
         logOutListener = () -> {
             user = null;
+            populateShoeList();
+            populateAverageList();
             base.getShopPanel().getShoeDetails().removeDetails();
             base.getShopPanel().removeDetails();
             base.getShopPanel().addScrollPane();
@@ -142,13 +166,12 @@ public class Controller {
             base.getShopPanel().addScrollPane();
         };
         addToCartListener = (shoe) -> {
-            String message;
             RepositoryAddToCart repositoryAddToCart = new RepositoryAddToCart(propertyReader.properties);
-            if (user.getShoes().isEmpty()) {
-                message = repositoryAddToCart.addToNewCart(user.getId(),0,shoe.getId());
-            } else {
-                message = repositoryAddToCart.addToExistingCart(user.getId(),shoe.getId());
-            }
+
+            String message = (user.getShoes().isEmpty())
+                    ? repositoryAddToCart.addToNewCart(user.getId(),0,shoe.getId())
+                    : repositoryAddToCart.addToExistingCart(user.getId(),shoe.getId());
+
             if (!message.equals("")) {
                 user.addShoe(shoe);
                 new CustomJop(message,"ok");
@@ -165,16 +188,24 @@ public class Controller {
         };
         viewCartListener = () -> {
             if (user.getShoes().isEmpty()) {
-                new CustomJop("Your cart is empty!","ok");
+                new CustomJop("Your cart is empty!","Oops!");
             } else {
                 viewCartFrame = new ViewCartFrame(user.getShoes());
                 viewCartFrame.setCheckoutListener(checkoutListener);
                 viewCartFrame.setVisible(true);
             }
         };
-        allAveragesListener = () -> {
-          allAveragesFrame = new AllAveragesFrame(allAverages);
-          allAveragesFrame.setVisible(true);
+        viewMenuListener = (event) -> {
+            switch (event) {
+                case 1 -> {
+                    infoFrame = new InfoFrame(allAverages);
+                    infoFrame.setVisible(true);
+                }
+                case 2 -> {
+                    infoFrame = new InfoFrame(getCustomerHistoryList(user.getCustomer()));
+                    infoFrame.setVisible(true);
+                }
+            }
         };
         rateCommentListener = (product, average, ratings, comments) -> {
             rateAndCommentFrame = new RateAndCommentFrame(product, average, ratings, comments, user.getId());
@@ -189,7 +220,7 @@ public class Controller {
     }
 
     private void setUpListeners() {
-        base.getShopPanel().setAllAveragesListener(allAveragesListener);
+        base.getShopPanel().setAllAveragesListener(viewMenuListener);
         base.getShopPanel().setLogOutListener(logOutListener);
         base.getShopPanel().getScrollablePanel().setShoeDetailsListener(shoeDetailsListener);
         base.getShopPanel().getShoeDetails().setGoBackListener(goBackListener);

@@ -1,6 +1,6 @@
 package gui;
 
-import listeners.AllAveragesListener;
+import listeners.ViewMenuListener;
 import listeners.LogOutListener;
 
 import javax.swing.*;
@@ -16,8 +16,9 @@ public class ShopPanel extends JPanel implements ActionListener {
     private final JMenu viewMenu = new JMenu();
     private final JMenuItem logout = new JMenuItem();
     private final JMenuItem averages = new JMenuItem();
+    private final JMenuItem history = new JMenuItem();
     private LogOutListener logOutListener;
-    private AllAveragesListener allAveragesListener;
+    private ViewMenuListener viewMenuListener;
     private ShoeDetails shoeDetails = new ShoeDetails();
     private final ScrollablePanel scrollablePanel = new ScrollablePanel();
 
@@ -36,8 +37,11 @@ public class ShopPanel extends JPanel implements ActionListener {
         userMenu.add(logout);
         averages.setText("View Averages");
         viewMenu.add(averages);
+        history.setText("View Customer History");
+        viewMenu.add(history);
         logout.addActionListener(this);
         averages.addActionListener(this);
+        history.addActionListener(this);
     }
 
     private void setUp() {
@@ -109,8 +113,8 @@ public class ShopPanel extends JPanel implements ActionListener {
         this.logOutListener = logOutListener;
     }
 
-    public void setAllAveragesListener(AllAveragesListener allAveragesListener) {
-        this.allAveragesListener = allAveragesListener;
+    public void setAllAveragesListener(ViewMenuListener viewMenuListener) {
+        this.viewMenuListener = viewMenuListener;
     }
 
     @Override
@@ -119,7 +123,10 @@ public class ShopPanel extends JPanel implements ActionListener {
             logOutListener.logOutOccurred();
         }
         if (e.getSource() == averages) {
-            allAveragesListener.showAllAverages();
+            viewMenuListener.viewMenuEvent(1);
+        }
+        if (e.getSource() == history) {
+            viewMenuListener.viewMenuEvent(2);
         }
     }
 
