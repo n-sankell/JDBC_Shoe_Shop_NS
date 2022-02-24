@@ -10,7 +10,7 @@ public class User {
 
     private final int id;
     private final String name;
-    private final Customer customer;
+    private Customer customer;
     private final List<CompleteShoe> shoes = new ArrayList<>();
 
     public User(int id, String name, Customer customer) {
@@ -41,6 +41,10 @@ public class User {
 
     public Customer getCustomer() {
         return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
 

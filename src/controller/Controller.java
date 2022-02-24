@@ -157,6 +157,7 @@ public class Controller {
                     infoFrame.setVisible(true);
                 }
                 case 2 -> {
+                    setUserCustomer();
                     infoFrame = new InfoFrame(getCustomerHistoryList(user.getCustomer()));
                     infoFrame.setVisible(true);
                 }
@@ -172,6 +173,10 @@ public class Controller {
             rateAndCommentFrame.dispose();
         };
 
+    }
+
+    private void setUserCustomer() {
+        customers.stream().filter(customer -> customer.getId() == user.getCustomer().getId()).forEach(customer -> user.setCustomer(customer));
     }
 
     private void linkInstances() {
