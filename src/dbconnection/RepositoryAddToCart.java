@@ -30,8 +30,6 @@ public class RepositoryAddToCart {
             callableStatement.setInt(2,orderId);
             callableStatement.setInt(3,shoeId);
             callableStatement.execute();
-            System.out.println("newCart");
-            System.out.println("Customer: "+customerId +" Shoe: "+shoeId);
 
             resultSet = callableStatement.getResultSet();
             while (resultSet.next()) {
@@ -62,7 +60,6 @@ public class RepositoryAddToCart {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        System.out.println("lastIndex: "+lastIndex);
         return lastIndex;
     }
 
@@ -79,8 +76,6 @@ public class RepositoryAddToCart {
             callableStatement.setInt(2,lastIndex);
             callableStatement.setInt(3,shoeId);
             callableStatement.execute();
-            System.out.println("Existing Cart");
-            System.out.println("Customer: "+customerId +" Shoe: "+shoeId);
 
             resultSet = callableStatement.getResultSet();
             while (resultSet.next()) {

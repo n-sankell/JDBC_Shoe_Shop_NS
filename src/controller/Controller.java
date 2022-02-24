@@ -74,7 +74,6 @@ public class Controller {
         RepositoryFindCustomer findCustomers = new RepositoryFindCustomer(propertyReader.properties);
         findCustomers.fetchCustomersToList();
         customers = findCustomers.getCustomers();
-        customers.forEach(customer -> System.out.println(customer.getName()+" "+customer.getPassword()));
     }
 
     private void setEventHandler() {
