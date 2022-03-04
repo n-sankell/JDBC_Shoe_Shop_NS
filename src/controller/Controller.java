@@ -157,7 +157,6 @@ public class Controller {
                     infoFrame.setVisible(true);
                 }
                 case 2 -> {
-                    setUserCustomer();
                     infoFrame = new InfoFrame(getCustomerHistoryList(user.getCustomer()));
                     infoFrame.setVisible(true);
                 }
@@ -212,6 +211,7 @@ public class Controller {
         populateShoeList();
         populateAverageList();
         populateCustomerList();
+        setUserCustomer();
         base.getShopPanel().getShoeDetails().removeDetails();
         base.getShopPanel().removeDetails();
         base.getShopPanel().addScrollPane();

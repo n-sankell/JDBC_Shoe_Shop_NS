@@ -7,7 +7,6 @@ public class BaseFrame extends JFrame {
 
     private LoginPanel loginPanel;
     private ShopPanel shopPanel;
-    private final GridBagLayout gb = new GridBagLayout();
 
     public BaseFrame() {
         super("Shoe Shop!");
